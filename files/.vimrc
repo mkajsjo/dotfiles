@@ -13,6 +13,9 @@ Plugin 'git://github.com/tpope/vim-repeat.git'
 Plugin 'git://github.com/tpope/vim-surround.git'
 Plugin 'git://github.com/wincent/scalpel.git'
 Plugin 'git://github.com/wincent/loupe.git'
+Plugin 'git@github.com:mileszs/ack.vim.git'
+Plugin 'git@github.com:junegunn/vim-easy-align.git'
+Plugin 'git@github.com:easymotion/vim-easymotion.git'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
@@ -29,6 +32,7 @@ set scrolloff=3      "Start scrolling 3 lines before edge of viewport
 set sidescrolloff=3  "Same as scrolloff but for columns
 set switchbuf=usetab "Try to reuse windows/tabs when switching buffers
 set textwidth=100    "Automatically hard wrap at 100 columns
+set shellpipe=>      "Don't leak grep to terminal
 
 "File settings
 set nobackup      "Don't create backup files
@@ -92,10 +96,18 @@ fun! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfun
 
+" Use Ripgrep instead of Ack
+if executable('rg')
+  set grepprg=ag\ --vimgrep\ --no-heading
+  let g:ackprg = 'rg --vimgrep --no-heading'
+endif
+
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+let mapleader = ' '
 
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
