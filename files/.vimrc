@@ -20,6 +20,10 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
 
+"EasyAlign maps
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
 so ~/.vim/color.vim
 
 "General settings
