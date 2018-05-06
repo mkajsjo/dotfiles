@@ -45,11 +45,17 @@ set noswapfile    "Don't create swap files
 set noundofile    "Don't create undo files
 
 "Tab settings
-set tabstop=2    "Number of spaces for tab key
 set smarttab     "Indent/dedent in leading whitespace
-set shiftwidth=2 "Number of spaces for autoindent
 set shiftround   "Always indent by multiple of shiftwith
 set expandtab    "Convert tabs to spaces
+
+"Number of spaces for tab key
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set tabstop=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set tabstop=2
+
+"Number of spaces for autoindent
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set shiftwidth=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set shiftwidth=2
 
 "Show whitespace settings
 set list
@@ -123,6 +129,12 @@ let php_var_selector_is_identifier=1
 
 filetype plugin on
 syntax on
+
+" Make current window more obvious by turning off/adjusting some features in non-current windows.
+if exists('+colorcolumn')
+  autocmd BufEnter,FocusGained,VimEnter,WinEnter * let &l:colorcolumn='+' . join(range(0, 254), ',+')
+  autocmd FocusLost,WinLeave * let &l:colorcolumn=join(range(1, 255), ',')
+endif
 
 inoremap {<CR> {<CR>}<Esc>O
 
