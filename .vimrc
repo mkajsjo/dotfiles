@@ -57,6 +57,8 @@ autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set tabstop=2
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set shiftwidth=4
 autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set shiftwidth=2
 
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *.zsh-theme set filetype=zsh
+
 "Show whitespace settings
 set list
 set listchars=nbsp:⦸
