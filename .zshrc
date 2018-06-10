@@ -63,10 +63,15 @@ plugins=(
   git
 )
 
+fpath=(
+    ~/dev/dotfiles/zsh
+    $fpath
+)
+
 source $ZSH/oh-my-zsh.sh
 
 autoload +X color
-color materia
+autoload -Uz init.sh
 
 # User configuration
 
@@ -112,3 +117,5 @@ bindkey -M vicmd "j" down-line-or-beginning-search
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+alias init="init.sh"
