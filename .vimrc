@@ -16,6 +16,7 @@ Plugin 'git://github.com/wincent/loupe.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:junegunn/vim-easy-align.git'
 Plugin 'git@github.com:easymotion/vim-easymotion.git'
+Plugin 'christoomey/vim-tmux-navigator'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
