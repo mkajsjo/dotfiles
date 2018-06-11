@@ -117,6 +117,10 @@ endif
 
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
+" Run command in background on save.
+" TODO stage-sync in origin/twapi
+autocmd BufWritePost * :silent exec "!echo hello"
+
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
