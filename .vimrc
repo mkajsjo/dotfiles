@@ -122,11 +122,18 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 let mapleader = ' '
 
+" Pane switching
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" Clipboard copy/paste
+nnoremap <c-p> "+p
+nnoremap <c-P> "+P
+inoremap <c-p> <esc>"+pa
+inoremap <c-P> <esc>"+Pa
+vnoremap <c-y> "+y
 
 let php_var_selector_is_identifier=1
 
