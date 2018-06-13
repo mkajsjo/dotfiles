@@ -139,6 +139,8 @@ inoremap <c-p> <esc>"+pa
 inoremap <c-P> <esc>"+Pa
 vnoremap <c-y> "+y
 
+nnoremap <c-g> :call ToggleList()<cr>
+
 let php_var_selector_is_identifier=1
 
 filetype plugin on
@@ -180,8 +182,95 @@ function! Extend()
   endif
 endfunction
 
+function! ToggleList()
+  let [x1, y1] = FindScopeStart()
+  let [x2, y2] = FindScopeEnd()
 
+  if (y1 == -1 || y2 == -1)
+    echo 'Unable to find scope'
+    return
+  endif
 
+  if (y1 == y2)
+    echo 'unfold'
+    call UnfoldList(y1, x1, x2)
+    call cursor(y1 + 1, x1)
+  else
+    echo 'fold'
+    call FoldList(y1, y2)
+    call cursor(y1, x1 + 1)
+  endif
+endfunction
 
+function! FoldList(y1, y2)
+  execute 'silent! ' . (a:y1 + 1) . ',' . a:y2 . ':s/\v^\s+//g'
+  execute 'silent! ' . a:y1 . ',' . (a:y2 - 1) . ':s/\v\s*\n//g'
+  execute 'silent! ' . a:y1 . ',' . a:y1 . ':s/\v,(\S)/, \1/g'
+endfunction
 
+function! UnfoldList(y, x1, x2)
+  let line = getline(a:y)
+  let a = nr2char(strgetchar(line, a:x1 - 1))
+  let b = nr2char(strgetchar(line, a:x2 - 1))
+  execute a:y . ',' . a:y . ':s/\v(\' . b . ')/\r\1/g'
+  execute a:y . ',' . a:y . ':s/\v([,\' . a . '])/\1\r/g'
+  execute 'normal! jV' . a:y . 'G='
+endfunction
+
+function! FindScopeStart()
+  return FindScopeDelimiter('start')
+endfunction
+
+function! FindScopeEnd()
+  return FindScopeDelimiter('end')
+endfunction
+
+function! FindScopeDelimiter(direction)
+  let n = a:direction == 'start' ? -1 : 1
+
+  let map = GetScopeMap()
+  let y = getcurpos()[1]
+  let x = getcurpos()[2] - 1
+  let line = getline(y)
+
+  while (!empty(line))
+    while (strgetchar(line, x) != -1)
+      let char = nr2char(strgetchar(line, x))
+
+      if (IsScopeDelimiter(char))
+        let map[char] = map[char] + 1
+      endif
+
+      if (a:direction == 'start' && AtScopeStart(map) || AtScopeEnd(map))
+        return [x + 1, y]
+      endif
+      let x = x + n
+    endwhile
+
+    let y = y + n
+    let line = getline(y)
+    let x = a:direction == 'start' ? len(line) - 1 : 0
+  endwhile
+  return [-1, -1]
+endfunction
+
+function! GetScopeMap()
+  return {'[': 0, ']': 0, '(': 0, ')': 0, '{': 0, '}': 0}
+endfunction
+
+function! IsScopeDelimiter(c)
+  return a:c == '[' || a:c == ']' || a:c == '(' || a:c == ')' || a:c == '{' || a:c == '}'
+endfunction
+
+function! AtScopeStart(map)
+  return a:map['['] > a:map[']'] || a:map['('] > a:map[')'] || a:map['{'] > a:map['}']
+endfunction
+
+function! AtScopeEnd(map)
+  return a:map['['] < a:map[']'] || a:map['('] < a:map[')'] || a:map['{'] < a:map['}']
+endfunction
+
+function! InStartScope(map)
+  return a:map['['] == a:map[']'] && a:map['('] == a:map[')'] && a:map['{'] == a:map['}']
+endfunction
 
