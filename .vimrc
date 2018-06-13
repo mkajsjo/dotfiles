@@ -209,12 +209,32 @@ function! FoldList(y1, y2)
 endfunction
 
 function! UnfoldList(y, x1, x2)
-  let line = getline(a:y)
-  let a = nr2char(strgetchar(line, a:x1 - 1))
-  let b = nr2char(strgetchar(line, a:x2 - 1))
-  execute a:y . ',' . a:y . ':s/\v(\' . b . ')/\r\1/g'
-  execute a:y . ',' . a:y . ':s/\v([,\' . a . '])/\1\r/g'
-  execute 'normal! jV' . a:y . 'G='
+  let map = GetScopeMap()
+  call cursor(a:y, a:x2)
+  normal! i@@
+  call cursor(a:y, a:x1)
+  normal! a@@
+  let x = a:x1 + 2
+  let x2 = a:x2 + 4
+
+  while (x < x2)
+    let line = getline(a:y)
+    let char = nr2char(strgetchar(line, x))
+    if (IsScopeDelimiter(char))
+      let map[char] = map[char] + 1
+    endif
+
+    let x = x + 1
+
+    if (char == ',' && InStartScope(map))
+      call cursor(a:y, x)
+      normal! a@@
+      let x = x + 2
+      let x2 = x2 + 2
+    endif
+  endwhile
+  execute a:y . ',' a:y . ':s/\v\@\@/\r/g'
+  execute 'normal! V' . a:y . 'G='
 endfunction
 
 function! FindScopeStart()
@@ -241,7 +261,7 @@ function! FindScopeDelimiter(direction)
         let map[char] = map[char] + 1
       endif
 
-      if (a:direction == 'start' && AtScopeStart(map) || AtScopeEnd(map))
+      if ((a:direction == 'start' && AtScopeStart(map)) || (a:direction == 'end' && AtScopeEnd(map)))
         return [x + 1, y]
       endif
       let x = x + n
