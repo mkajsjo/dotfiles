@@ -202,8 +202,14 @@ function! Extend()
 endfunction
 
 function! ToggleList()
-  let [x1, y1] = FindScopeStart()
-  let [x2, y2] = FindScopeEnd()
+  let [x1, y1] = FindScopeStart(-1, 0)
+  if (y1 == -1)
+    let [x1, y1] = FindScopeStart(1, 0)
+    if (y1 == -1)
+      let [x1, y1] = FindScopeStart(-1, 1)
+    endif
+  endif
+  let [x2, y2] = FindScopeEnd([x1, y1], 1, 1)
 
   if (y1 == -1 || y2 == -1)
     echo 'Unable to find scope'
@@ -256,25 +262,25 @@ function! UnfoldList(y, x1, x2)
   execute 'normal! V' . a:y . 'G='
 endfunction
 
-function! FindScopeStart()
-  return FindScopeDelimiter('start')
+function! FindScopeStart(direction, search_multi_line)
+  return FindScopeDelimiter('start', a:direction, a:search_multi_line, [getcurpos()[2], getcurpos()[1]])
 endfunction
 
-function! FindScopeEnd()
-  return FindScopeDelimiter('end')
+function! FindScopeEnd(start_pos, direction, search_multi_line)
+  return FindScopeDelimiter('end', a:direction, a:search_multi_line, a:start_pos)
 endfunction
 
-function! FindScopeDelimiter(direction)
-  let n = a:direction == 'start' ? -1 : 1
+function! FindScopeDelimiter(type, direction, search_multi_line, start_pos)
+  let n = a:direction
 
   let map = GetScopeMap()
-  let y = getcurpos()[1]
-  let x = getcurpos()[2] - 1
+  let [x, y] = a:start_pos
+  let x = x - 1
   let line = getline(y)
 
   " Fix for starting at scope delimiter
   let char = nr2char(strgetchar(line, x))
-  if (a:direction == 'start')
+  if (a:type == 'start')
     if (IsScopeStartDelimiter(char))
       return [x + 1, y]
     elseif (IsScopeEndDelimiter(char))
@@ -296,15 +302,19 @@ function! FindScopeDelimiter(direction)
         let map[char] = map[char] + 1
       endif
 
-      if ((a:direction == 'start' && AtScopeStart(map)) || (a:direction == 'end' && AtScopeEnd(map)))
+      if ((a:type == 'start' && AtScopeStart(map)) || (a:type == 'end' && AtScopeEnd(map)))
         return [x + 1, y]
       endif
       let x = x + n
     endwhile
 
+    if (!a:search_multi_line)
+      return [-1, -1]
+    endif
+
     let y = y + n
     let line = getline(y)
-    let x = a:direction == 'start' ? len(line) - 1 : 0
+    let x = n == -1 ? len(line) - 1 : 0
   endwhile
   return [-1, -1]
 endfunction
