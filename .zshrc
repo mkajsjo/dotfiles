@@ -68,6 +68,11 @@ fpath=(
     $fpath
 )
 
+path=(
+    $HOME/.config/composer/vendor/bin
+    $path
+)
+
 source $ZSH/oh-my-zsh.sh
 
 autoload +X color

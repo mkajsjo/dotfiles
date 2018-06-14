@@ -17,9 +17,28 @@ Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:junegunn/vim-easy-align.git'
 Plugin 'git@github.com:easymotion/vim-easymotion.git'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'git@github.com:Shougo/deoplete.nvim.git'
+Plugin 'git@github.com:lvht/phpcd.vim.git'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['omni']
+
+" Deoplete tab to cycle completions
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Deoplete enter to complete
+inoremap <expr><cr> pumvisible() ? "\<c-n><cr>" : "\<cr>"
+
+" <CR>: close popup and save indent.
+"inoremap <silent> <cr> <c-r>=<SID>my_cr_function()<cr>
+"function! s:my_cr_function()
+"  return deoplete#mappings#smart_close_popup() . "\<cr>"
+"endfunction
 
 "EasyAlign maps
 xmap ga <Plug>(EasyAlign)
@@ -253,6 +272,22 @@ function! FindScopeDelimiter(direction)
   let x = getcurpos()[2] - 1
   let line = getline(y)
 
+  " Fix for starting at scope delimiter
+  let char = nr2char(strgetchar(line, x))
+  if (a:direction == 'start')
+    if (IsScopeStartDelimiter(char))
+      return [x + 1, y]
+    elseif (IsScopeEndDelimiter(char))
+      let map[char] = -1
+    endif
+  else
+    if (IsScopeEndDelimiter(char))
+      return [x + 1, y]
+    elseif (IsScopeStartDelimiter(char))
+      let map[char] = -1
+    endif
+  endif
+
   while (!empty(line))
     while (strgetchar(line, x) != -1)
       let char = nr2char(strgetchar(line, x))
@@ -279,7 +314,15 @@ function! GetScopeMap()
 endfunction
 
 function! IsScopeDelimiter(c)
-  return a:c == '[' || a:c == ']' || a:c == '(' || a:c == ')' || a:c == '{' || a:c == '}'
+  return IsScopeStartDelimiter(a:c) || IsScopeEndDelimiter(a:c)
+endfunction
+
+function! IsScopeStartDelimiter(c)
+  return a:c == '[' || a:c == '(' || a:c == '{'
+endfunction
+
+function! IsScopeEndDelimiter(c)
+  return a:c == ']' || a:c == ')' || a:c == '}'
 endfunction
 
 function! AtScopeStart(map)
