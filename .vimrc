@@ -234,29 +234,33 @@ function! FoldList(y1, y2)
 endfunction
 
 function! UnfoldList(y, x1, x2)
-  let map = GetScopeMap()
+  let scope_map = GetScopeMap()
   call cursor(a:y, a:x2)
   normal! i@@
   call cursor(a:y, a:x1)
   normal! a@@
   let x = a:x1 + 2
   let x2 = a:x2 + 4
+  let quote_map = GetQuoteMap(x, a:y)
 
   while (x < x2)
-    let line = getline(a:y)
-    let char = nr2char(strgetchar(line, x))
-    if (IsScopeDelimiter(char))
-      let map[char] = map[char] + 1
+    let char = GetCharAt(x, a:y)
+
+    call UpdateQuoteMap(x, a:y, quote_map)
+    if (!InQuotes(quote_map))
+      if (IsScopeDelimiter(char))
+        let scope_map[char] = scope_map[char] + 1
+      endif
+
+      if (char == ',' && InStartScope(scope_map))
+        call cursor(a:y, x + 1)
+        normal! a@@
+        let x = x + 2
+        let x2 = x2 + 2
+      endif
     endif
 
     let x = x + 1
-
-    if (char == ',' && InStartScope(map))
-      call cursor(a:y, x)
-      normal! a@@
-      let x = x + 2
-      let x2 = x2 + 2
-    endif
   endwhile
   execute a:y . ',' a:y . ':s/\v\@\@/\r/g'
   execute 'normal! V' . a:y . 'G='
@@ -284,8 +288,7 @@ function! FindScopeDelimiter(type, direction, search_multi_line, ...)
   while (!empty(line))
     while (strgetchar(line, x - 1) != -1)
       let char = GetCharAt(x, y)
-      let char_before = GetCharAt(x - 1, y)
-      call UpdateQuoteMap(char_before, char, quote_map)
+      call UpdateQuoteMap(x, y, quote_map)
 
       if(!InQuotes(quote_map))
         call UpdateScopeMap(char, scope_map)
@@ -330,16 +333,33 @@ function! GetCharAt(x, y)
   return nr2char(char)
 endfunction
 
-function! UpdateQuoteMap(char_before, char, map)
-  "TODO
+function! UpdateQuoteMap(x, y, map)
+  if (GetCharAt(a:x - 1, a:y) == '\')
+    return
+  endif
+
+  let char = GetCharAt(a:x, a:y)
+  if (char == "'" && a:map['"'] == 0 && a:map['`'] == 0 ||
+     \char == '"' && a:map["'"] == 0 && a:map['`'] == 0 ||
+     \char == "`" && a:map['"'] == 0 && a:map["'"] == 0)
+    let a:map[char] = (a:map[char] + 1) % 2
+  endif
 endfunction
 
 function! GetQuoteMap(x, y)
-  return {} "TODO
+  let map = {'"': 0, "'": 0, '`': 0}
+
+  let i = 0
+  while (i <= a:x)
+    call UpdateQuoteMap(i, a:y, map)
+    let i = i + 1
+  endwhile
+
+  return map
 endfunction
 
 function! InQuotes(map)
-  return 0 "TODO
+  return a:map["'"] > 0 || a:map['"'] > 0 || a:map['`'] > 0
 endfunction
 
 function! UpdateScopeMap(char, map)
