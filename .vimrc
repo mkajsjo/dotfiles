@@ -263,47 +263,36 @@ function! UnfoldList(y, x1, x2)
 endfunction
 
 function! FindScopeStart(direction, search_multi_line)
-  return FindScopeDelimiter('start', a:direction, a:search_multi_line, [getcurpos()[2], getcurpos()[1]])
+  return FindScopeDelimiter('start', a:direction, a:search_multi_line)
 endfunction
 
 function! FindScopeEnd(start_pos, direction, search_multi_line)
   return FindScopeDelimiter('end', a:direction, a:search_multi_line, a:start_pos)
 endfunction
 
-function! FindScopeDelimiter(type, direction, search_multi_line, start_pos)
+function! FindScopeDelimiter(type, direction, search_multi_line, ...)
+  let [x, y] = a:0 > 0 ? a:1 : [getcurpos()[2], getcurpos()[1]]
   let n = a:direction
+  let scope_map = GetScopeMap()
+  let quote_map = GetQuoteMap(x, y)
 
-  let map = GetScopeMap()
-  let [x, y] = a:start_pos
-  let x = x - 1
-  let line = getline(y)
-
-  " Fix for starting at scope delimiter
-  let char = nr2char(strgetchar(line, x))
-  if (a:type == 'start')
-    if (IsScopeStartDelimiter(char))
-      return [x + 1, y]
-    elseif (IsScopeEndDelimiter(char))
-      let map[char] = -1
-    endif
-  else
-    if (IsScopeEndDelimiter(char))
-      return [x + 1, y]
-    elseif (IsScopeStartDelimiter(char))
-      let map[char] = -1
-    endif
+  if (!InQuotes(quote_map))
+    call FixStartAtDelimiter(x, y, a:type, scope_map)
   endif
 
+  let line = getline(y)
   while (!empty(line))
-    while (strgetchar(line, x) != -1)
-      let char = nr2char(strgetchar(line, x))
+    while (strgetchar(line, x - 1) != -1)
+      let char = GetCharAt(x, y)
+      let char_before = GetCharAt(x - 1, y)
+      call UpdateQuoteMap(char_before, char, quote_map)
 
-      if (IsScopeDelimiter(char))
-        let map[char] = map[char] + 1
-      endif
+      if(!InQuotes(quote_map))
+        call UpdateScopeMap(char, scope_map)
 
-      if ((a:type == 'start' && AtScopeStart(map)) || (a:type == 'end' && AtScopeEnd(map)))
-        return [x + 1, y]
+        if (AtScopeDelimiter(a:type, scope_map))
+          return [x, y]
+        endif
       endif
       let x = x + n
     endwhile
@@ -314,9 +303,49 @@ function! FindScopeDelimiter(type, direction, search_multi_line, start_pos)
 
     let y = y + n
     let line = getline(y)
-    let x = n == -1 ? len(line) - 1 : 0
+    let x = n == -1 ? len(line) : 1
   endwhile
   return [-1, -1]
+endfunction
+
+function! FixStartAtDelimiter(x, y, type, map)
+  let char = GetCharAt(a:x, a:y)
+  if (a:type == 'start' && IsScopeEndDelimiter(char) ||
+      \a:type == 'end' && IsScopeStartDelimiter(char))
+    let a:map[char] = -1
+  endif
+endfunction
+
+function! GetCharAt(x, y)
+  let line = getline(a:y)
+  if (empty(line))
+    return ''
+  endif
+
+  let char = strgetchar(line, a:x - 1)
+  if (char == -1)
+    return ''
+  endif
+
+  return nr2char(char)
+endfunction
+
+function! UpdateQuoteMap(char_before, char, map)
+  "TODO
+endfunction
+
+function! GetQuoteMap(x, y)
+  return {} "TODO
+endfunction
+
+function! InQuotes(map)
+  return 0 "TODO
+endfunction
+
+function! UpdateScopeMap(char, map)
+  if (IsScopeDelimiter(a:char))
+    let a:map[a:char] = a:map[a:char] + 1
+  endif
 endfunction
 
 function! GetScopeMap()
@@ -335,12 +364,11 @@ function! IsScopeEndDelimiter(c)
   return a:c == ']' || a:c == ')' || a:c == '}'
 endfunction
 
-function! AtScopeStart(map)
-  return a:map['['] > a:map[']'] || a:map['('] > a:map[')'] || a:map['{'] > a:map['}']
-endfunction
-
-function! AtScopeEnd(map)
-  return a:map['['] < a:map[']'] || a:map['('] < a:map[')'] || a:map['{'] < a:map['}']
+function! AtScopeDelimiter(type, map)
+  let n = a:type == 'start' ? 1 : -1
+  return a:map['['] - a:map[']'] == n ||
+        \a:map['('] - a:map[')'] == n ||
+        \a:map['{'] - a:map['}'] == n
 endfunction
 
 function! InStartScope(map)
