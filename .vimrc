@@ -32,7 +32,7 @@ let g:deoplete#ignore_sources.php = ['omni']
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Deoplete enter to complete
-inoremap <expr><cr> pumvisible() ? "\<c-n><cr>" : "\<cr>"
+inoremap <expr><cr> pumvisible() ? "\<c-p>\<c-n><c-y>" : "\<cr>"
 
 " <CR>: close popup and save indent.
 "inoremap <silent> <cr> <c-r>=<SID>my_cr_function()<cr>
