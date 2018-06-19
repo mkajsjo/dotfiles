@@ -6,7 +6,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'scrooloose/syntastic'
+Plugin 'w0rp/ale'
 Plugin 'git://github.com/StanAngeloff/php.vim.git'
 Plugin 'chriskempson/base16-vim'
 Plugin 'git://github.com/tpope/vim-repeat.git'
@@ -27,6 +27,13 @@ filetype plugin indent on    " required
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
+
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = '≫'
+let g:ale_sign_warning = '≫'
+
+let g:ale_php_phan_use_client = 1
+let g:ale_php_phan_executable = '/home/mkajsjo/phan/phan_client'
 
 set completeopt=noinsert
 
