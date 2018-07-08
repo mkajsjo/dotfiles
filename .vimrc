@@ -33,7 +33,7 @@ let g:ale_sign_error = '≫'
 let g:ale_sign_warning = '≫'
 
 let g:ale_php_phan_use_client = 1
-let g:ale_php_phan_executable = '/home/mkajsjo/phan/phan_client'
+let g:ale_php_phan_executable = '/home/mikael/phan/phan_client'
 
 set completeopt=noinsert
 
@@ -147,7 +147,7 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Run command in background on save.
 " TODO stage-sync in origin/twapi
-autocmd BufWritePost * :silent exec "!echo hello"
+autocmd BufWritePost */dev/origin/* :silent call jobstart("stage-sync")
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
