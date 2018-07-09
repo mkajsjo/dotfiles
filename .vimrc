@@ -407,3 +407,32 @@ function! InStartScope(map)
   return a:map['['] == a:map[']'] && a:map['('] == a:map[')'] && a:map['{'] == a:map['}']
 endfunction
 
+" ---------------------------
+
+function! CreateForeach()
+  let matches = matchlist(getline('.'), '\v^(\s*)(\$)?(.{-})(s)?\s*$')
+  if (matches[0] == '')
+    echo 'Error no matches'
+    return
+  endif
+
+  let indent = matches[1]
+
+  if (matches[4] == 's')
+    let list    = '$' . matches[3] . matches[4]
+    let element = '$' . matches[3]
+  else
+    let list    = '$' . matches[3]
+    let element = '$value'
+  endif
+  stopinsert
+  call append(line('.'), [
+    \indent . 'foreach (' . list . ' as ' . element . ') {',
+    \indent,
+    \indent . '}'
+  \])
+  execute "normal! ddjA\<tab>"
+  startinsert!
+endfunction
+
+inoremap <c-f> <esc>:call CreateForeach()<cr>
