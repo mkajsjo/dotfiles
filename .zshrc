@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+#
 
 # Path to your oh-my-zsh installation.
   export ZSH=~/.oh-my-zsh
@@ -59,6 +60,7 @@ ZSH_THEME="mkajsjo"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+
 plugins=(
   git
 )
@@ -126,3 +128,12 @@ bindkey -M vicmd "j" down-line-or-beginning-search
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias init="init.sh"
+
+setopt auto_cd
+cdpath=($HOME/dev)
+
+function goto() {
+    git pull
+    git checkout "$1"
+    git pull
+}

@@ -20,9 +20,12 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'git@github.com:Shougo/deoplete.nvim.git'
 Plugin 'git@github.com:lvht/phpcd.vim.git'
+Plugin 'alvan/vim-php-manual'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
+
+let g:php_manual_online_search_shortcut = ''
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
