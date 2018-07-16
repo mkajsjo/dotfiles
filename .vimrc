@@ -23,9 +23,12 @@ Plugin 'git@github.com:lvht/phpcd.vim.git'
 Plugin 'udalov/kotlin-vim'
 Plugin 'hsanson/vim-android'
 Plugin 'artur-shaik/vim-javacomplete2'
+Plugin 'alvan/vim-php-manual'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
+
+let g:php_manual_online_search_shortcut = ''
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
