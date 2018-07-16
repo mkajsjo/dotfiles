@@ -20,6 +20,9 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'git@github.com:Shougo/deoplete.nvim.git'
 Plugin 'git@github.com:lvht/phpcd.vim.git'
+Plugin 'udalov/kotlin-vim'
+Plugin 'hsanson/vim-android'
+Plugin 'artur-shaik/vim-javacomplete2'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
@@ -31,6 +34,8 @@ let g:deoplete#ignore_sources.php = ['omni']
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
 let g:ale_sign_warning = '≫'
+
+autocmd BufReadPost *.java let g:ale_java_javac_classpath = javacomplete#server#GetClassPath()
 
 let g:ale_php_phan_use_client = 1
 let g:ale_php_phan_executable = '/home/mikael/phan/phan_client'
@@ -433,3 +438,4 @@ function! CreateForeach()
 endfunction
 
 inoremap <c-f> <esc>:call CreateForeach()<cr>
+
