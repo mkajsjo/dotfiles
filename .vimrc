@@ -20,6 +20,9 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'git@github.com:Shougo/deoplete.nvim.git'
 Plugin 'git@github.com:lvht/phpcd.vim.git'
+Plugin 'udalov/kotlin-vim'
+Plugin 'hsanson/vim-android'
+Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'alvan/vim-php-manual'
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -36,6 +39,8 @@ autocmd BufEnter *.php let g:ale_lint_on_text_changed = 'never'
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
 let g:ale_sign_warning = '≫'
+
+autocmd BufReadPost *.java let g:ale_java_javac_classpath = javacomplete#server#GetClassPath()
 
 let g:ale_php_phan_use_client = 1
 let g:ale_php_phan_executable = '/home/mikael/phan/phan_client'
@@ -414,3 +419,32 @@ function! InStartScope(map)
   return a:map['['] == a:map[']'] && a:map['('] == a:map[')'] && a:map['{'] == a:map['}']
 endfunction
 
+" ---------------------------
+
+function! CreateForeach()
+  let matches = matchlist(getline('.'), '\v^(\s*)(\$)?(.{-})(s)?\s*$')
+  if (matches[0] == '')
+    echo 'Error no matches'
+    return
+  endif
+
+  let indent = matches[1]
+
+  if (matches[4] == 's')
+    let list    = '$' . matches[3] . matches[4]
+    let element = '$' . matches[3]
+  else
+    let list    = '$' . matches[3]
+    let element = '$value'
+  endif
+  stopinsert
+  call append(line('.'), [
+    \indent . 'foreach (' . list . ' as ' . element . ') {',
+    \indent,
+    \indent . '}'
+  \])
+  execute "normal! ddjA\<tab>"
+  startinsert!
+endfunction
+
+inoremap <c-f> <esc>:call CreateForeach()<cr>
