@@ -31,6 +31,8 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
 
+autocmd BufEnter *.php let g:ale_lint_on_text_changed = 'never'
+
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
 let g:ale_sign_warning = '≫'
@@ -69,6 +71,7 @@ set sidescrolloff=3  "Same as scrolloff but for columns
 set switchbuf=usetab "Try to reuse windows/tabs when switching buffers
 set textwidth=100    "Automatically hard wrap at 100 columns
 set shellpipe=>      "Don't leak grep to terminal
+set inccommand=nosplit "Live update :substitute
 
 "File settings
 set nobackup      "Don't create backup files
@@ -150,12 +153,16 @@ autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Run command in background on save.
 " TODO stage-sync in origin/twapi
-autocmd BufWritePost */dev/origin/* :silent call jobstart("stage-sync")
+autocmd BufWritePost */dev/origin/*,*/dev/twapi/* :silent call jobstart("stage-sync")
 
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 let mapleader = ' '
+
+nnoremap <leader>h :call phpcd#JumpToDefinition('normal')<cr>
+nnoremap <leader>s :call phpcd#JumpToDefinition('split')<cr>
+nnoremap <leader>u :call phpcd#JumpBack()<cr>
 
 " Pane switching
 nnoremap <c-j> <c-w>j
@@ -407,32 +414,3 @@ function! InStartScope(map)
   return a:map['['] == a:map[']'] && a:map['('] == a:map[')'] && a:map['{'] == a:map['}']
 endfunction
 
-" ---------------------------
-
-function! CreateForeach()
-  let matches = matchlist(getline('.'), '\v^(\s*)(\$)?(.{-})(s)?\s*$')
-  if (matches[0] == '')
-    echo 'Error no matches'
-    return
-  endif
-
-  let indent = matches[1]
-
-  if (matches[4] == 's')
-    let list    = '$' . matches[3] . matches[4]
-    let element = '$' . matches[3]
-  else
-    let list    = '$' . matches[3]
-    let element = '$value'
-  endif
-  stopinsert
-  call append(line('.'), [
-    \indent . 'foreach (' . list . ' as ' . element . ') {',
-    \indent,
-    \indent . '}'
-  \])
-  execute "normal! ddjA\<tab>"
-  startinsert!
-endfunction
-
-inoremap <c-f> <esc>:call CreateForeach()<cr>
