@@ -28,13 +28,15 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
 
+set t_ut=
+
 let g:php_manual_online_search_shortcut = ''
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
 
-autocmd BufEnter *.php let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
@@ -45,6 +47,8 @@ autocmd BufReadPost *.java let g:ale_java_javac_classpath = javacomplete#server#
 let g:ale_php_phan_use_client = 1
 let g:ale_php_phan_executable = '/home/mikael/phan/phan_client'
 
+hi phpKeyword ctermfg=6 guifg=#0184bc
+
 set completeopt=noinsert
 
 " Deoplete tab to cycle completions
@@ -52,12 +56,6 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Deoplete enter to complete
 inoremap <expr><cr> pumvisible() ? "\<c-p>\<c-n>\<c-y>" : "\<cr>"
-
-" <CR>: close popup and save indent.
-"inoremap <silent> <cr> <c-r>=<SID>my_cr_function()<cr>
-"function! s:my_cr_function()
-"  return deoplete#mappings#smart_close_popup() . "\<cr>"
-"endfunction
 
 "EasyAlign maps
 xmap ga <Plug>(EasyAlign)
@@ -157,7 +155,6 @@ endif
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " Run command in background on save.
-" TODO stage-sync in origin/twapi
 autocmd BufWritePost */dev/origin/*,*/dev/twapi/* :silent call jobstart("stage-sync")
 
 " Return to last edit position when opening files (You want this!)
@@ -176,10 +173,10 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
 " Clipboard copy/paste
-nnoremap <c-p> "+p
-nnoremap <c-P> "+P
+nnoremap <c-p> h"+p
 inoremap <c-p> <esc>"+pa
-inoremap <c-P> <esc>"+Pa
+cnoremap <c-p> <c-r>+
+vnoremap <c-p> "+p
 vnoremap <c-y> "+y
 
 nnoremap <c-g> :call ToggleList()<cr>
