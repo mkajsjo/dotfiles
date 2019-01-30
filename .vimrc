@@ -15,32 +15,49 @@ Plugin 'git://github.com/wincent/scalpel.git'
 Plugin 'git://github.com/wincent/loupe.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:junegunn/vim-easy-align.git'
-Plugin 'git@github.com:easymotion/vim-easymotion.git'
 Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'git@github.com:Shougo/deoplete.nvim.git'
-Plugin 'git@github.com:lvht/phpcd.vim.git'
+"Plugin 'shawncplus/phpcomplete.vim'
+"Plugin 'git@github.com:lvht/phpcd.vim.git'
 Plugin 'udalov/kotlin-vim'
 Plugin 'hsanson/vim-android'
 Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'alvan/vim-php-manual'
+Plugin 'tpope/vim-fugitive'
+Plugin 'SirVer/ultisnips'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
 
+let base16colorspace=256
+let g:base16_shell_path='~/.zsh/base16-shell/scripts'
+
+let g:UltiSnipsUsePythonVersion = 3
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsUsePythonVersion = 3
+let g:UltiSnipsSnippetDirectories = '~/dev/dotfiles/ultisnips'
+let g:UltiSnipsSnippetDirectories=["~/dev/dotfiles/ultisnips", "UltiSnips"]
+let g:UltiSnipsSnippetsDir = '~/dev/dotfiles/ultisnips'
+
+"hi erlangAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
+"hi erlangQuotedAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
+
+autocmd BufEnter *.erl hi erlangLocalFuncRef ctermbg=NONE guibg=NONE
+autocmd BufEnter *.erl hi erlangLocalFuncCall ctermbg=NONE guibg=NONE
+autocmd BufEnter *.erl hi erlangGlobalFuncRef ctermbg=NONE guibg=NONE
+autocmd BufEnter *.erl hi erlangGlobalFuncCall ctermbg=NONE guibg=NONE
+
 set t_ut=
 
 let g:php_manual_online_search_shortcut = ''
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-let g:deoplete#ignore_sources.php = ['omni']
 
 let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
 let g:ale_sign_warning = '≫'
+
+let g:ale_erlang_erlc_options = '-I apps/twapi/include'
 
 autocmd BufReadPost *.java let g:ale_java_javac_classpath = javacomplete#server#GetClassPath()
 
@@ -49,13 +66,11 @@ let g:ale_php_phan_executable = '/home/mikael/phan/phan_client'
 
 hi phpKeyword ctermfg=6 guifg=#0184bc
 
-set completeopt=noinsert
-
 " Deoplete tab to cycle completions
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+"inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Deoplete enter to complete
-inoremap <expr><cr> pumvisible() ? "\<c-p>\<c-n>\<c-y>" : "\<cr>"
+"inoremap <expr><cr> pumvisible() ? "\<c-p>\<c-n>\<c-y>" : "\<cr>"
 
 "EasyAlign maps
 xmap ga <Plug>(EasyAlign)
@@ -64,8 +79,8 @@ nmap ga <Plug>(EasyAlign)
 so ~/.vim/color.vim
 
 "General settings
-set number           "Show line number
-set cursorline       "Highlight cursor line
+set nonumber           "Show no line number
+"set cursorline       "Highlight cursor line
 set laststatus=2     "Always show status line
 set lazyredraw       "Don't update screen during macro playback
 set nojoinspaces     "Don't autoinsert two spaces after join command
@@ -116,11 +131,11 @@ endif
 
 "Create window focus by highlighting lines
 if exists('+colorcolumn')
-  let &l:colorcolumn='+' . join(range(0, 254), ',+')
+  "let &l:colorcolumn='+' . join(range(0, 254), ',+')
 endif
 
 if exists('+relativenumber')
-  set relativenumber "Show relative line numbers
+  "set relativenumber "Show relative line numbers
 endif
 
 if has('windows')
@@ -162,15 +177,26 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 
 let mapleader = ' '
 
-nnoremap <leader>h :call phpcd#JumpToDefinition('normal')<cr>
-nnoremap <leader>s :call phpcd#JumpToDefinition('split')<cr>
-nnoremap <leader>u :call phpcd#JumpBack()<cr>
+"nnoremap <leader>h :call phpcd#JumpToDefinition('normal')<cr>
+"nnoremap <leader>s :call phpcd#JumpToDefinition('split')<cr>
+"nnoremap <leader>u :call phpcd#JumpBack()<cr>
 
 " Pane switching
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
+tnoremap <c-j>h <c-\><c-n><c-w>h
+tnoremap <c-k>j <c-\><c-n><c-w>j
+tnoremap <c-h>k <c-\><c-n><c-w>k
+tnoremap <c-l>l <c-\><c-n><c-w>l
+
+tnoremap <esc> <c-\><c-n>
+
+inoremap <c-t> <c-p>
+inoremap <c-n> <c-n>
+xnoremap <c-t> <c-p>
+
 
 " Clipboard copy/paste
 nnoremap <c-p> h"+p
@@ -181,10 +207,61 @@ vnoremap <c-y> "+y
 
 nnoremap <c-g> :call ToggleList()<cr>
 
+" Folding maps
+"nnoremap <tab> za
+"nnoremap <s-tab> zM
+"nnoremap <leader><tab> zR
+
+nnoremap <leader>a :call ToggleAtomBinary()<cr>
+nnoremap <leader>o :call ToggleCamelSnakeCase()<cr>
+
+vnoremap s :s/\v%V
+
 let php_var_selector_is_identifier=1
 
 filetype plugin on
 syntax on
+
+function! ToggleAtomBinary()
+  let x = col('.')
+  let y = line('.')
+  normal! diwP
+  if strcharpart(getline('.'), col('.'), 3) == '">>'
+    normal! b3h3xel3x
+    call cursor(y, x - 3)
+  else
+    exec "normal! ciw<<\"\<esc>pa\">>\<esc>"
+    call cursor(y, x + 3)
+  endif
+endfunction
+
+function! ToggleCamelSnakeCase()
+  let x = col('.')
+  let y = line('.')
+  exec "normal! viw"
+
+  let selection = GetVisualSelection()
+  if matchstr(selection, '\v\u') != ""
+    '<,'>s/\v%V(\w)(\u)/\1_\L\2/g
+    exec "normal! \<esc>viw"
+    silent! '<,'>s/\v%V(\u)/\L\1/
+  else
+    '<,'>s/\v%V_(\w)/\U\1/g
+  endif
+
+  call cursor(y, x)
+  exec "normal! \<esc>"
+endfunction
+
+function! GetVisualSelection() abort
+  try
+    let a_save = @a
+    silent! normal! "ay
+    return @a
+  finally
+    let @a = a_save
+  endtry
+endfunction
 
 " Make current window more obvious by turning off/adjusting some features in non-current windows.
 if exists('+colorcolumn')
