@@ -76,8 +76,8 @@ path=(
 
 source $ZSH/oh-my-zsh.sh
 
-autoload +X color
-color
+# autoload +X color
+# color
 
 autoload -Uz init.sh
 
