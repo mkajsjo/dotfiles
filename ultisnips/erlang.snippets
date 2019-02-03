@@ -1,0 +1,305 @@
+extends twapi
+
+global !p
+import re
+
+def expand_snippet_multiline_list(start, stop, snip):
+	n = int(snip.buffer[snip.line].strip())
+
+	# erase current line
+	snip.buffer[snip.line] = re.sub(
+		r"\w*",
+		"",
+		snip.buffer[snip.line]
+	)
+
+	snippet_body = start
+	for i in range(1, n + 1):
+		snippet_body += '\t${' + str(i) + ':' + str(chr(64 + i)) + '},\n'
+
+	snippet_body = snippet_body[:-2] + '\n'
+	snippet_body += stop + '${' + str(n + 1) + '}'
+
+	snip.expand_anon(snippet_body)
+
+def expand_function_clause(snip):
+	matches = re.match(
+		r'^(\w*)\((.*)\) ->\s*',
+		snip.buffer[snip.line]
+	)
+
+	snip.buffer[snip.line] = ''
+
+	tabstops = '${1}'
+	n = 2
+	param_string = matches.group(2)
+
+	if len(param_string) > 0:
+		params = matches.group(2).split(', ')
+		tabstops = ''
+		for i, p in enumerate(params):
+			tabstops += '${' + str(i + 1) + ':' + p + '}, '
+			n = i + 2
+
+		tabstops = tabstops[:-2]
+
+
+	snippet_body = matches.group(1) \
+				 + '(' + tabstops \
+				 + ') ->\n' \
+				 + '\t${' + str(n) + ':Body}\n' \
+				 + matches.group(0)
+
+	snip.expand_anon(snippet_body)
+endglobal
+
+
+post_jump "expand_function_clause(snip)"
+snippet /^\w+\(.*\) ->\s*/ "" r
+`!p snip.rv = match.group(0)`
+endsnippet
+
+
+post_jump "expand_snippet_multiline_list('\{\n', '}', snip)"
+snippet /\{(\d)/ "" r
+`!p snip.rv = match.group(1)`
+endsnippet
+
+
+post_jump "expand_snippet_multiline_list('[\n', ']', snip)"
+snippet /\[(\d)/ "" r
+`!p snip.rv = match.group(1)`
+endsnippet
+
+
+post_jump "expand_snippet_multiline_list('#\{\n', '}', snip)"
+snippet /\#(\d)/ "" r
+`!p snip.rv = match.group(1)`
+endsnippet
+
+
+post_jump "expand_snippet_multiline_list('<<\n', '>>', snip)"
+snippet /\<(\d)/ "" r
+`!p snip.rv = match.group(1)`
+endsnippet
+
+
+snippet [
+[
+	${1}
+]${2}
+endsnippet
+
+
+snippet {
+{
+	${1}
+}${2}
+endsnippet
+
+
+snippet #
+#{
+	${1}
+}${2}
+endsnippet
+
+
+snippet <
+<<
+	${1}
+>>${2}
+endsnippet
+
+
+snippet |
+[
+	${3:N}
+||
+	${2:N} <- ${1:List}
+]${4}
+endsnippet
+
+
+snippet map
+lists:map(
+	fun (${2:N}) ->
+			${3:N}
+	end,
+	${1:List}
+)${4}
+endsnippet
+
+
+snippet fold
+lists:foldl(
+	fun (${3:N}, ${4:Acc}) ->
+			${5:Acc}
+	end,
+	${2:#{}},
+	${1:List}
+)${6}
+endsnippet
+
+
+snippet foldr
+lists:foldr(
+	fun (${3:N}, ${4:Acc}) ->
+			${5:Acc}
+	end,
+	${2:#{}},
+	${1:List}
+)${6}
+endsnippet
+
+
+snippet mmap
+maps:map(
+	fun (${2:K}, ${3:V}) ->
+			${4:V}
+	end,
+	${1:Map}
+)${5}
+endsnippet
+
+
+snippet mfold
+maps:foldl(
+	fun (${3:K}, ${4:V}, ${5:Acc}) ->
+			${6:Acc}
+	end,
+	${2:#{}},
+	${1:Map}
+)${7}
+endsnippet
+
+
+snippet case
+case ${1:Expr} of
+	${2:true} ->
+		${3:ok};
+	${4:false} ->
+		${5:ok}
+end${6}
+endsnippet
+
+
+snippet try
+try
+	${1:Expr}
+catch
+	${2:_:_} ->
+		${3:throw(todo)}
+end${4}
+endsnippet
+
+
+snippet fun
+fun (${1:Args}) ->
+		${2:Body}
+end${3}
+endsnippet
+
+
+snippet /-?module/ "" r
+-module(`!p fn`).
+
+-export(
+	[
+
+	]
+).
+
+${1}
+endsnippet
+
+
+snippet /-?record/ "" r
+-record(
+	${1:Name},
+	{
+		${2:Fields}
+	}
+).${3}
+endsnippet
+
+
+snippet /=\s*/ "" r
+=
+	${1}
+endsnippet
+
+
+snippet a2b
+atom_to_binary(${1:Atom})${2}
+endsnippet
+
+
+snippet b2a
+binary_to_existing_atom(${1:Binary}, utf8)${2}
+endsnippet
+
+
+snippet i2b
+integer_to_binary(${1:Int})${2}
+endsnippet
+
+
+snippet f2b
+float_to_binary(${1:Float}, [\{decimals, ${2:D}}, compact])${3}
+endsnippet
+
+
+snippet l2b
+list_to_binary(${1:List})${2}
+endsnippet
+
+
+snippet b2l
+binary_to_list(${1:Binary})${2}
+endsnippet
+
+
+snippet io2b
+iolist_to_binary(${1:IoList})${2}
+endsnippet
+
+
+snippet m2l
+maps:to_list(${1:Map})${2}
+endsnippet
+
+
+snippet l2m
+maps:to_list(${1:Map})${2}
+endsnippet
+
+
+snippet io
+io:fwrite("$1: ~p~n", [${1}])${2}
+endsnippet
+
+
+snippet mp
+maps:put(${1:K}, ${2:V}, ${3:Map})${4}
+endsnippet
+
+
+snippet mg
+maps:get(${1:K}, ${2:Map}, ${3:undefined})${4}
+endsnippet
+
+
+snippet mik
+maps:is_key(${1:K}, ${2:Map})${3}
+endsnippet
+
+
+snippet mk
+maps:keys(${1:Map})${2}
+endsnippet
+
+
+snippet mv
+maps:values(${1:Map})${2}
+endsnippet
