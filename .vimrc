@@ -13,28 +13,44 @@ Plugin 'git://github.com/tpope/vim-repeat.git'
 Plugin 'git://github.com/tpope/vim-surround.git'
 Plugin 'git://github.com/wincent/scalpel.git'
 Plugin 'git://github.com/wincent/loupe.git'
-Plugin 'git@github.com:mileszs/ack.vim.git'
-Plugin 'git@github.com:junegunn/vim-easy-align.git'
-Plugin 'git@github.com:easymotion/vim-easymotion.git'
+Plugin 'git://github.com/mileszs/ack.vim.git'
+Plugin 'git://github.com/junegunn/vim-easy-align.git'
+Plugin 'git://github.com/easymotion/vim-easymotion.git'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'shawncplus/phpcomplete.vim'
-Plugin 'git@github.com:Shougo/deoplete.nvim.git'
-Plugin 'git@github.com:lvht/phpcd.vim.git'
+Plugin 'git://github.com/lvht/phpcd.vim.git'
 Plugin 'udalov/kotlin-vim'
 Plugin 'hsanson/vim-android'
 Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'alvan/vim-php-manual'
+Plugin 'SirVer/ultisnips'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
 
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
+let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsSnippetsDir = $HOME . '/dev/dotfiles/ultisnips'
+let g:UltiSnipsSnippetDirectories = [$HOME . '/dev/dotfiles/ultisnips']
+
+let g:ulti_expand_res = 0
+function! ExpandTab()
+  call UltiSnips#ExpandSnippet()
+  if (g:ulti_expand_res)
+    return ''
+  endif
+  return '<tab>'
+endfunction
+
 set t_ut=
 
 let g:php_manual_online_search_shortcut = ''
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-let g:deoplete#ignore_sources.php = ['omni']
 
 let g:ale_lint_on_text_changed = 'never'
 
@@ -61,7 +77,7 @@ inoremap <expr><cr> pumvisible() ? "\<c-p>\<c-n>\<c-y>" : "\<cr>"
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-so ~/.vim/color.vim
+" so ~/.vim/color.vim
 
 "General settings
 set number           "Show line number
@@ -119,9 +135,7 @@ if exists('+colorcolumn')
   let &l:colorcolumn='+' . join(range(0, 254), ',+')
 endif
 
-if exists('+relativenumber')
-  set relativenumber "Show relative line numbers
-endif
+set nonumber
 
 if has('windows')
   set splitbelow "Open horizontal splits below

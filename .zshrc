@@ -72,13 +72,14 @@ fpath=(
 
 path=(
     $HOME/.config/composer/vendor/bin
+    $HOME/.gem/ruby/2.6.0/bin
     $path
 )
 
 source $ZSH/oh-my-zsh.sh
 
-autoload +X color
-color
+#autoload +X color
+#color
 
 autoload -Uz init.sh
 
@@ -131,6 +132,7 @@ export PATH=$PATH:$ANDROID_HOME/tools
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias init="init.sh"
+alias v=nvim
 
 setopt auto_cd
 cdpath=($HOME/dev)
@@ -140,3 +142,9 @@ function goto() {
     git checkout "$1"
     git pull
 }
+
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
