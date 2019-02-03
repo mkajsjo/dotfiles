@@ -87,28 +87,28 @@ endsnippet
 snippet [
 [
 	${1}
-]${2}
+]
 endsnippet
 
 
 snippet {
 {
 	${1}
-}${2}
+}
 endsnippet
 
 
 snippet #
 #{
 	${1}
-}${2}
+}
 endsnippet
 
 
 snippet <
 <<
 	${1}
->>${2}
+>>
 endsnippet
 
 
@@ -117,7 +117,7 @@ snippet |
 	${3:N}
 ||
 	${2:N} <- ${1:List}
-]${4}
+]
 endsnippet
 
 
@@ -127,7 +127,7 @@ lists:map(
 			${3:N}
 	end,
 	${1:List}
-)${4}
+)
 endsnippet
 
 
@@ -138,7 +138,7 @@ lists:foldl(
 	end,
 	${2:#{}},
 	${1:List}
-)${6}
+)
 endsnippet
 
 
@@ -149,7 +149,7 @@ lists:foldr(
 	end,
 	${2:#{}},
 	${1:List}
-)${6}
+)
 endsnippet
 
 
@@ -159,7 +159,7 @@ case ${1:Expr} of
 		${3:ok};
 	${4:false} ->
 		${5:ok}
-end${6}
+end
 endsnippet
 
 
@@ -169,14 +169,14 @@ try
 catch
 	${2:_:_} ->
 		${3:throw(todo)}
-end${4}
+end
 endsnippet
 
 
 snippet fun
 fun (${1:Args}) ->
 		${2:Body}
-end${3}
+end
 endsnippet
 
 
@@ -199,63 +199,57 @@ snippet /-?record/ "" r
 	{
 		${2:Fields}
 	}
-).${3}
-endsnippet
-
-
-snippet /=\s*/ "" r
-=
-	${1}
+).
 endsnippet
 
 
 snippet a2b
-atom_to_binary(${1:Atom})${2}
+atom_to_binary(${1:Atom})
 endsnippet
 
 
 snippet b2a
-binary_to_existing_atom(${1:Binary}, utf8)${2}
+binary_to_existing_atom(${1:Binary}, utf8)
 endsnippet
 
 
 snippet i2b
-integer_to_binary(${1:Int})${2}
+integer_to_binary(${1:Int})
 endsnippet
 
 
 snippet f2b
-float_to_binary(${1:Float}, [\{decimals, ${2:D}}, compact])${3}
+float_to_binary(${1:Float}, [\{decimals, ${2:D}}, compact])
 endsnippet
 
 
 snippet l2b
-list_to_binary(${1:List})${2}
+list_to_binary(${1:List})
 endsnippet
 
 
 snippet b2l
-binary_to_list(${1:Binary})${2}
+binary_to_list(${1:Binary})
 endsnippet
 
 
 snippet io2b
-iolist_to_binary(${1:IoList})${2}
+iolist_to_binary(${1:IoList})
 endsnippet
 
 
 snippet m2l
-maps:to_list(${1:Map})${2}
+maps:to_list(${1:Map})
 endsnippet
 
 
 snippet l2m
-maps:to_list(${1:Map})${2}
+maps:to_list(${1:Map})
 endsnippet
 
 
 snippet io
-io:fwrite("$1: ~p~n", [${1}])${2}
+io:fwrite("$1: ~p~n", [${1}])
 endsnippet
 
 
