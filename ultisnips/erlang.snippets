@@ -114,7 +114,7 @@ endsnippet
 
 snippet |
 [
-	${3:N}
+	${3:$2}
 ||
 	${2:N} <- ${1:List}
 ]
@@ -124,7 +124,7 @@ endsnippet
 snippet map
 lists:map(
 	fun (${2:N}) ->
-			${3:N}
+			${3:$2}
 	end,
 	${1:List}
 )
@@ -134,7 +134,7 @@ endsnippet
 snippet fold
 lists:foldl(
 	fun (${3:N}, ${4:Acc}) ->
-			${5:Acc}
+			${5:$4}
 	end,
 	${2:#{}},
 	${1:List}
@@ -145,7 +145,7 @@ endsnippet
 snippet foldr
 lists:foldr(
 	fun (${3:N}, ${4:Acc}) ->
-			${5:Acc}
+			${5:$4}
 	end,
 	${2:#{}},
 	${1:List}
@@ -272,7 +272,7 @@ endsnippet
 snippet mfold
 maps:foldl(
 	fun (${3:K}, ${4:V}, ${5:Acc}) ->
-			${6:Acc}
+			${6:$5}
 	end,
 	${2:#{}},
 	${1:Map}
@@ -382,3 +382,109 @@ maps:without(${1:Keys}, ${2:Map})
 endsnippet
 # end maps
 
+
+# proplists
+snippet pfilter
+lists:filter(
+	fun ({${2:K}, ${3:V}}) ->
+			${4:true}
+	end,
+	${1:List}
+)
+endsnippet
+
+
+snippet pfold
+lists:foldl(
+	fun ({${3:K}, ${4:V}}, ${5:Acc}) ->
+			${6:$5}
+	end,
+	${2:#{}},
+	${1:List}
+)
+endsnippet
+
+
+snippet pget
+proplists:get_value(${1:Key}, ${2:List}`!p
+if t[3] == '' or t[3] == 'undefined':
+	snip.rv = ''
+else:
+	snip.rv = ', '
+`${3:Default}`!p if t[3] == 'undefined': t[3] = ''`)
+endsnippet
+
+
+snippet pkey
+proplists:is_defined(${1:Key}, ${2:List})
+endsnippet
+
+
+snippet pkeys
+proplists:get_keys(${1:List})
+endsnippet
+
+
+snippet pmap
+lists:map(
+	fun ({${2:K}, ${3:V}}) ->
+			{$2, ${4:$3}}
+	end,
+	${1:List}
+)
+endsnippet
+
+
+snippet pmerge
+lists:keymerge(
+	1,
+	lists:keysort(1, ${2:Overrides}),
+	lists:keysort(1, ${1:List})
+)
+endsnippet
+
+
+snippet pput
+lists:keyreplace(${1:Key}, 1, ${2:List}, {$1, ${3:Value}})
+endsnippet
+
+
+snippet premove
+proplists:delete(${1:Key}, ${2:List})
+endsnippet
+
+
+snippet psize
+length(${1:List})
+endsnippet
+
+
+snippet ptake
+lists:keytake(${1:Key}, 1, ${2:List})
+endsnippet
+
+
+snippet pvalues
+[${2:N} || {_, $2} <- ${1:List}]
+endsnippet
+
+
+snippet pwith
+[
+	${3:N}
+||
+	{K, _} = $3 <- ${1:List},
+	lists:keymember(K, 1, ${2:With})
+]
+endsnippet
+
+
+snippet pwithout
+[
+	${3:N}
+||
+	{K, _} = $3 <- ${1:List},
+	not lists:keymember(K, 1, ${2:Without})
+]
+endsnippet
+# end proplists
