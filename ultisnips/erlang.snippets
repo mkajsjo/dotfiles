@@ -153,27 +153,6 @@ lists:foldr(
 endsnippet
 
 
-snippet mmap
-maps:map(
-	fun (${2:K}, ${3:V}) ->
-			${4:V}
-	end,
-	${1:Map}
-)${5}
-endsnippet
-
-
-snippet mfold
-maps:foldl(
-	fun (${3:K}, ${4:V}, ${5:Acc}) ->
-			${6:Acc}
-	end,
-	${2:#{}},
-	${1:Map}
-)${7}
-endsnippet
-
-
 snippet case
 case ${1:Expr} of
 	${2:true} ->
@@ -202,7 +181,7 @@ endsnippet
 
 
 snippet /-?module/ "" r
--module(`!p fn`).
+-module(`!p fn.split('.')[0]`).
 
 -export(
 	[
@@ -280,26 +259,132 @@ io:fwrite("$1: ~p~n", [${1}])${2}
 endsnippet
 
 
-snippet mp
-maps:put(${1:K}, ${2:V}, ${3:Map})${4}
+# maps
+snippet mfilter
+maps:filter(
+	fun (${2:K}, ${3:V}) ->
+			${4:true}
+	end,
+	${1:Map}
+)
 endsnippet
 
 
-snippet mg
-maps:get(${1:K}, ${2:Map}, ${3:undefined})${4}
+snippet mfind
+maps:find(${1:Key}, ${2:Map})
 endsnippet
 
 
-snippet mik
-maps:is_key(${1:K}, ${2:Map})${3}
+snippet mfold
+maps:foldl(
+	fun (${3:K}, ${4:V}, ${5:Acc}) ->
+			${6:Acc}
+	end,
+	${2:#{}},
+	${1:Map}
+)
 endsnippet
 
 
-snippet mk
-maps:keys(${1:Map})${2}
+snippet mfromlist
+maps:from_list(${1:List})
 endsnippet
 
 
-snippet mv
-maps:values(${1:Map})${2}
+snippet mget
+maps:get(${1:Key}, ${2:Map}, ${3:undefined})
 endsnippet
+
+
+snippet mkey
+maps:is_key(${1:Key}, ${2:Map})
+endsnippet
+
+
+snippet miter
+maps:iterator(${1:Map})
+endsnippet
+
+
+snippet mkeys
+maps:keys(${1:Map})
+endsnippet
+
+
+snippet mmap
+maps:map(
+	fun (${2:K}, ${3:V}) ->
+			${4:$3}
+	end,
+	${1:Map}
+)
+endsnippet
+
+
+snippet mmerge
+maps:merge(${1:A}, ${2:B})
+endsnippet
+
+
+snippet mnext
+maps:next(${1:Iterator})
+endsnippet
+
+
+snippet mput
+maps:put(${1:Key}, ${2:Value}, ${3:Map})
+endsnippet
+
+
+snippet mremove
+maps:remove(${1:Key}, ${2:Map})
+endsnippet
+
+
+snippet msize
+maps:size(${1:Map})
+endsnippet
+
+
+snippet mtake
+maps:take(${1:Key}, ${2:Map})
+endsnippet
+
+
+snippet mtolist
+maps:to_list(${1:Map})
+endsnippet
+
+
+snippet mupdate
+maps:put(${1:Key}, ${2:Value}, ${3:Map})
+endsnippet
+
+
+snippet mupdatewith
+maps:update_with(
+	${3:Key},
+	fun (${4:V}) ->
+		${5:$3}
+	end,
+	${2:Default},
+	${1:Map}
+)
+endsnippet
+
+
+snippet mvalues
+maps:values(${1:Map})
+endsnippet
+
+
+snippet mwith
+maps:with(${1:Keys}, ${2:Map})
+endsnippet
+
+
+snippet mwithout
+maps:without(${1:Keys}, ${2:Map})
+endsnippet
+# end maps
+
