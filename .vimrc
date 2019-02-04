@@ -13,8 +13,8 @@ Plugin 'git://github.com/tpope/vim-repeat.git'
 Plugin 'git://github.com/tpope/vim-surround.git'
 Plugin 'git://github.com/wincent/scalpel.git'
 Plugin 'git://github.com/wincent/loupe.git'
-Plugin 'git@github.com:mileszs/ack.vim.git'
-Plugin 'git@github.com:junegunn/vim-easy-align.git'
+Plugin 'git://github.com/mileszs/ack.vim.git'
+Plugin 'git://github.com/junegunn/vim-easy-align.git'
 Plugin 'christoomey/vim-tmux-navigator'
 "Plugin 'shawncplus/phpcomplete.vim'
 "Plugin 'git@github.com:lvht/phpcd.vim.git'
@@ -23,21 +23,22 @@ Plugin 'hsanson/vim-android'
 Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'alvan/vim-php-manual'
 Plugin 'tpope/vim-fugitive'
-Plugin 'SirVer/ultisnips'
+Bundle 'SirVer/ultisnips'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
 
+if filereadable(expand("~/.vimrc_background"))
+  source ~/.vimrc_background
+endif
+
 let base16colorspace=256
 let g:base16_shell_path='~/.zsh/base16-shell/scripts'
 
-let g:UltiSnipsUsePythonVersion = 3
-let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsExpandTrigger="<c-i>"
 let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsUsePythonVersion = 3
-let g:UltiSnipsSnippetDirectories = '~/dev/dotfiles/ultisnips'
-let g:UltiSnipsSnippetDirectories=["~/dev/dotfiles/ultisnips", "UltiSnips"]
-let g:UltiSnipsSnippetsDir = '~/dev/dotfiles/ultisnips'
+let g:UltiSnipsSnippetDirectories = [$HOME . '/dev/dotfiles/ultisnips']
+let g:UltiSnipsSnippetDir = $HOME . 'dev/dotfiles/ultisnips'
 
 "hi erlangAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
 "hi erlangQuotedAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
@@ -76,7 +77,7 @@ hi phpKeyword ctermfg=6 guifg=#0184bc
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-so ~/.vim/color.vim
+"so ~/.vim/color.vim
 
 "General settings
 set nonumber           "Show no line number

@@ -1,8 +1,97 @@
 snippet map
 lists:map(
-	fun (N) ->
-			N
+	fun (${2:N}) ->
+			${3:N}
 	end,
-	List
-),
+	${1:List}
+),${4}
+endsnippet
+
+
+snippet fold
+lists:foldl(
+	fun (${3:N}, ${4:Acc}) ->
+			${5:N}
+	end,
+	${2:Acc0},
+	${1:List}
+),${6}
+endsnippet
+
+
+snippet io
+io:fwrite("${1:ARG}: ~p~n", [$1]),
+endsnippet
+
+
+# TODO
+snippet arg.io
+Arg
+io:fwrite("Arg: ~p~n", [Arg])
+endsnippet
+
+
+snippet [
+[
+	${1}
+],
+endsnippet
+
+
+snippet {
+{
+	${1}
+}
+endsnippet
+
+
+snippet case
+case ${1:Expr} of
+	${2:true} ->
+		${3:ok};
+	${4:false} ->
+		${5:ok}
+end,${6}
+endsnippet
+
+
+# TODO
+snippet end
+	${1:P} ->
+		${2:ok}
+end
+endsnippet
+
+
+snippet [|
+[
+	${3:N}
+||
+	${2:N} <- ${1:List}
+],${4}
+endsnippet
+
+
+snippet export
+-export(
+	[
+		${1:Fun}
+	]
+).
+endsnippet
+
+
+snippet ab
+atom_to_binary(${1:Atom})
+endsnippet
+
+
+snippet ba
+binary_to_atom(${1:Binary}, uft8)
+endsnippet
+
+
+# TODO
+snippet 1..2
+lists:seq(1, 2)
 endsnippet
