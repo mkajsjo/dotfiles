@@ -77,9 +77,6 @@ path=(
 
 source $ZSH/oh-my-zsh.sh
 
-# autoload +X color
-# color
-
 autoload -Uz init.sh
 
 # User configuration
@@ -131,6 +128,7 @@ export PATH=$PATH:$ANDROID_HOME/tools
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias init="init.sh"
+alias v=nvim
 
 setopt auto_cd
 cdpath=($HOME/dev)

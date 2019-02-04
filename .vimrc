@@ -16,14 +16,11 @@ Plugin 'git://github.com/wincent/loupe.git'
 Plugin 'git://github.com/mileszs/ack.vim.git'
 Plugin 'git://github.com/junegunn/vim-easy-align.git'
 Plugin 'christoomey/vim-tmux-navigator'
-"Plugin 'shawncplus/phpcomplete.vim'
-"Plugin 'git@github.com:lvht/phpcd.vim.git'
 Plugin 'udalov/kotlin-vim'
 Plugin 'hsanson/vim-android'
 Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'alvan/vim-php-manual'
-Plugin 'tpope/vim-fugitive'
-Bundle 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
 call vundle#end()            " required
 filetype plugin indent on    " required
 "End Vundle stuff
@@ -35,18 +32,28 @@ endif
 let base16colorspace=256
 let g:base16_shell_path='~/.zsh/base16-shell/scripts'
 
-let g:UltiSnipsExpandTrigger="<c-i>"
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<tab>'
 let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsSnippetsDir = $HOME . '/dev/dotfiles/ultisnips'
 let g:UltiSnipsSnippetDirectories = [$HOME . '/dev/dotfiles/ultisnips']
-let g:UltiSnipsSnippetDir = $HOME . 'dev/dotfiles/ultisnips'
 
-"hi erlangAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
-"hi erlangQuotedAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
+let g:ulti_expand_res = 0
+function! ExpandTab()
+  call UltiSnips#ExpandSnippet()
+  if (g:ulti_expand_res)
+    return ''
+  endif
+  return '<tab>'
+endfunction
 
 autocmd BufEnter *.erl hi erlangLocalFuncRef ctermbg=NONE guibg=NONE
 autocmd BufEnter *.erl hi erlangLocalFuncCall ctermbg=NONE guibg=NONE
 autocmd BufEnter *.erl hi erlangGlobalFuncRef ctermbg=NONE guibg=NONE
 autocmd BufEnter *.erl hi erlangGlobalFuncCall ctermbg=NONE guibg=NONE
+
+"hi erlangAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
+"hi erlangQuotedAtom term=bold ctermfg=Cyan guifg=#80a0ff gui=bold
 
 set t_ut=
 
@@ -76,8 +83,6 @@ hi phpKeyword ctermfg=6 guifg=#0184bc
 "EasyAlign maps
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-
-"so ~/.vim/color.vim
 
 "General settings
 set nonumber           "Show no line number
@@ -135,9 +140,7 @@ if exists('+colorcolumn')
   "let &l:colorcolumn='+' . join(range(0, 254), ',+')
 endif
 
-if exists('+relativenumber')
-  "set relativenumber "Show relative line numbers
-endif
+set nonumber
 
 if has('windows')
   set splitbelow "Open horizontal splits below

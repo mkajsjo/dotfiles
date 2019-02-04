@@ -1,0 +1,103 @@
+
+
+snippet insert
+Query =
+	{
+		insert, ${1:Table}, [${2}],
+		values, [${3}]
+	},
+${4}
+endsnippet
+
+
+snippet insert!
+Conn = tw_context:get_db_connection(Ctx),
+Query =
+	{
+		insert, ${1:Table}, [${2}],
+		values, [${3}]
+	},
+ok = tw_db:execute(Conn, Query),
+${4}
+endsnippet
+
+
+snippet delete
+Query =
+	{
+		delete, ${1:Table},
+		where, [${2}]
+	},
+${3}
+endsnippet
+
+
+snippet delete!
+Conn = tw_context:get_db_connection(Ctx),
+Query =
+	{
+		delete, ${1:Table},
+		where, [${2}]
+	},
+ok = tw_db:execute(Conn, Query),
+${3}
+endsnippet
+
+
+snippet select
+Query =
+	{
+		select, [${1}],
+		from, ${2:Table},
+		where, [${3}]
+	},
+${4}
+endsnippet
+
+
+snippet select!
+Conn = tw_context:get_db_connection(Ctx),
+Query =
+	{
+		select, [${1}],
+		from, ${2:Table},
+		where, [${3}]
+	},
+Rows = tw_db:rows(Conn, Query),
+${4}
+endsnippet
+
+
+snippet selectfold
+Conn = tw_context:get_db_connection(Ctx),
+Query =
+	{
+		select, [${1}],
+		from, ${2:Table},
+		where, [${3}]
+	},
+${4:Row}s = tw_db:rows(Conn, Query),
+${8:Map} =
+	lists:foldl(
+		fun (${6:$4}, ${7:Acc}) ->
+				${8:Acc}
+		end,
+		${5:#{}},
+		$4s
+	),
+$4,
+${9}
+endsnippet
+
+
+snippet ctxw
+Webshop = tw_context:get_webshop_id(Ctx),
+${1}
+endsnippet
+
+
+snippet ctxs
+Webshop = tw_context:get_webshop_id(Ctx),
+Supershop = tw_webshop:get_supershop(Ctx),
+${1}
+endsnippet

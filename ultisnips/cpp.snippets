@@ -1,0 +1,60 @@
+global !p
+import re
+
+def to_upper(string):
+	with_underscores = re.sub(
+		r"([^_])([A-Z])",
+		r"\1_\2",
+		string
+	)
+
+	return with_underscores.upper()
+endglobal
+
+# print aliases
+snippet print
+std::cout << "${1}" << std::endl;${2}
+endsnippet
+
+
+snippet cout
+std::cout << "${1}" << std::endl;${2}
+endsnippet
+
+
+snippet echo
+std::cout << "${1}" << std::endl;${2}
+endsnippet
+# end print aliases
+
+
+snippet inc
+#include ${1}
+endsnippet
+
+
+snippet incio
+#include <iostream>
+endsnippet
+
+
+snippet main
+int main(int argc, char* argv[])
+{
+	${1}
+}
+endsnippet
+
+
+snippet class
+#ifndef __`!p snip.rv = to_upper(fn.replace('.', '_'))`__
+#define __`!p snip.rv = to_upper(fn.replace('.', '_'))`__
+
+class `!p snip.rv = fn.split('.')[0]`
+{
+public:
+	${1}
+};
+
+#endif
+endsnippet
