@@ -71,7 +71,7 @@ fpath=(
 
 path=(
     $HOME/.config/composer/vendor/bin
-    $HOME/.gem/ruby/2.6.0/bin
+    $HOME/bin
     $path
 )
 
@@ -139,8 +139,9 @@ function goto() {
     git pull
 }
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/"
+BASE16_SHELL="$HOME/.config/base16-shell"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+eval `keychain --eval --agents ssh mkajsjo`

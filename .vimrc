@@ -82,8 +82,6 @@ hi phpKeyword ctermfg=6 guifg=#0184bc
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-" so ~/.vim/color.vim
-
 "General settings
 set nonumber           "Show no line number
 "set cursorline       "Highlight cursor line
