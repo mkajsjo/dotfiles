@@ -59,7 +59,7 @@ set t_ut=
 
 let g:php_manual_online_search_shortcut = ''
 
-let g:ale_lint_on_text_changed = 'never'
+"let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = '≫'
@@ -111,6 +111,10 @@ set expandtab    "Convert tabs to spaces
 "Number of spaces for tab key
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set tabstop=4
 autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set tabstop=2
+
+"Number of spaces for tab key
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set softtabstop=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set softtabstop=2
 
 "Number of spaces for autoindent
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set shiftwidth=4

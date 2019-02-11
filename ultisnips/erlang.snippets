@@ -116,7 +116,7 @@ snippet |
 [
 	${3:$2}
 ||
-	${2:N} <- ${1:List}
+	${2:N} <- ${1:${VISUAL:List}}
 ]
 endsnippet
 
@@ -154,7 +154,7 @@ endsnippet
 
 
 snippet case
-case ${1:Expr} of
+case ${1:${VISUAL:Expr}} of
 	${2:true} ->
 		${3:ok};
 	${4:false} ->
@@ -165,7 +165,7 @@ endsnippet
 
 snippet try
 try
-	${1:Expr}
+	${1:${VISUAL:Expr}}
 catch
 	${2:_:_} ->
 		${3:throw(todo)}
@@ -181,7 +181,7 @@ endsnippet
 
 
 snippet /-?module/ "" r
--module(`!p fn.split('.')[0]`).
+-module(`!p snip.rv = fn.split('.')[0]`).
 
 -export(
 	[
@@ -203,58 +203,65 @@ snippet /-?record/ "" r
 endsnippet
 
 
-snippet a2b
-atom_to_binary(${1:Atom})
+# cast functions
+snippet a2b "" i
+atom_to_binary(${1:${VISUAL:Atom}}, utf8)
 endsnippet
 
 
-snippet b2a
-binary_to_existing_atom(${1:Binary}, utf8)
+snippet b2a "" i
+binary_to_existing_atom(${1:${VISUAL:Binary}}, utf8)
 endsnippet
 
 
-snippet i2b
-integer_to_binary(${1:Int})
+snippet i2b "" i
+integer_to_binary(${1:${VISUAL:Int}})
 endsnippet
 
 
-snippet f2b
-float_to_binary(${1:Float}, [\{decimals, ${2:D}}, compact])
+snippet f2b "" i
+float_to_binary(${1:${VISUAL:Float}}, [\{decimals, ${2:D}}, compact])
 endsnippet
 
 
-snippet l2b
-list_to_binary(${1:List})
+snippet b2f "" i
+binary_to_float(${1:${VISUAL:Binary}})
 endsnippet
 
 
-snippet b2l
-binary_to_list(${1:Binary})
+snippet l2b "" i
+list_to_binary(${1:${VISUAL:List}})
 endsnippet
 
 
-snippet io2b
-iolist_to_binary(${1:IoList})
+snippet b2l "" i
+binary_to_list(${1:${VISUAL:Binary}})
 endsnippet
 
 
-snippet m2l
-maps:to_list(${1:Map})
+snippet io2b "" i
+iolist_to_binary(${1:${VISUAL:IoList}})
 endsnippet
 
 
-snippet l2m
-maps:to_list(${1:Map})
+snippet m2l "" i
+maps:to_list(${1:${VISUAL:Map}})
 endsnippet
 
 
-snippet io
+snippet l2m "" i
+maps:from_list(${1:${VISUAL:Map}})
+endsnippet
+# end cast functions
+
+
+snippet print
 io:fwrite("$1: ~p~n", [${1}])
 endsnippet
 
 
 # maps
-snippet mfilter
+snippet mfilter "" i
 maps:filter(
 	fun (${2:K}, ${3:V}) ->
 			${4:true}
@@ -264,12 +271,12 @@ maps:filter(
 endsnippet
 
 
-snippet mfind
+snippet mfind "" i
 maps:find(${1:Key}, ${2:Map})
 endsnippet
 
 
-snippet mfold
+snippet mfold "" i
 maps:foldl(
 	fun (${3:K}, ${4:V}, ${5:Acc}) ->
 			${6:$5}
@@ -280,32 +287,32 @@ maps:foldl(
 endsnippet
 
 
-snippet mfromlist
+snippet mfromlist "" i
 maps:from_list(${1:List})
 endsnippet
 
 
-snippet mget
+snippet mget "" i
 maps:get(${1:Key}, ${2:Map}, ${3:undefined})
 endsnippet
 
 
-snippet mkey
+snippet mkey "" i
 maps:is_key(${1:Key}, ${2:Map})
 endsnippet
 
 
-snippet miter
+snippet miter "" i
 maps:iterator(${1:Map})
 endsnippet
 
 
-snippet mkeys
+snippet mkeys "" i
 maps:keys(${1:Map})
 endsnippet
 
 
-snippet mmap
+snippet mmap "" i
 maps:map(
 	fun (${2:K}, ${3:V}) ->
 			${4:$3}
@@ -315,51 +322,51 @@ maps:map(
 endsnippet
 
 
-snippet mmerge
+snippet mmerge "" i
 maps:merge(${1:A}, ${2:B})
 endsnippet
 
 
-snippet mnext
+snippet mnext "" i
 maps:next(${1:Iterator})
 endsnippet
 
 
-snippet mput
+snippet mput "" i
 maps:put(${1:Key}, ${2:Value}, ${3:Map})
 endsnippet
 
 
-snippet mremove
+snippet mremove "" i
 maps:remove(${1:Key}, ${2:Map})
 endsnippet
 
 
-snippet msize
+snippet msize "" i
 maps:size(${1:Map})
 endsnippet
 
 
-snippet mtake
+snippet mtake "" i
 maps:take(${1:Key}, ${2:Map})
 endsnippet
 
 
-snippet mtolist
+snippet mtolist "" i
 maps:to_list(${1:Map})
 endsnippet
 
 
-snippet mupdate
+snippet mupdate "" i
 maps:put(${1:Key}, ${2:Value}, ${3:Map})
 endsnippet
 
 
-snippet mupdatewith
+snippet mupdatewith "" i
 maps:update_with(
 	${3:Key},
 	fun (${4:V}) ->
-		${5:$3}
+		${5:$4}
 	end,
 	${2:Default},
 	${1:Map}
@@ -367,24 +374,24 @@ maps:update_with(
 endsnippet
 
 
-snippet mvalues
+snippet mvalues "" i
 maps:values(${1:Map})
 endsnippet
 
 
-snippet mwith
+snippet mwith "" i
 maps:with(${1:Keys}, ${2:Map})
 endsnippet
 
 
-snippet mwithout
+snippet mwithout "" i
 maps:without(${1:Keys}, ${2:Map})
 endsnippet
 # end maps
 
 
 # proplists
-snippet pfilter
+snippet pfilter "" i
 lists:filter(
 	fun ({${2:K}, ${3:V}}) ->
 			${4:true}
@@ -394,7 +401,7 @@ lists:filter(
 endsnippet
 
 
-snippet pfold
+snippet pfold "" i
 lists:foldl(
 	fun ({${3:K}, ${4:V}}, ${5:Acc}) ->
 			${6:$5}
@@ -405,7 +412,7 @@ lists:foldl(
 endsnippet
 
 
-snippet pget
+snippet pget "" i
 proplists:get_value(${1:Key}, ${2:List}`!p
 if t[3] == '' or t[3] == 'undefined':
 	snip.rv = ''
@@ -415,17 +422,17 @@ else:
 endsnippet
 
 
-snippet pkey
+snippet pkey "" i
 proplists:is_defined(${1:Key}, ${2:List})
 endsnippet
 
 
-snippet pkeys
+snippet pkeys "" i
 proplists:get_keys(${1:List})
 endsnippet
 
 
-snippet pmap
+snippet pmap "" i
 lists:map(
 	fun ({${2:K}, ${3:V}}) ->
 			{$2, ${4:$3}}
@@ -435,7 +442,7 @@ lists:map(
 endsnippet
 
 
-snippet pmerge
+snippet pmerge "" i
 lists:keymerge(
 	1,
 	lists:keysort(1, ${2:Overrides}),
@@ -444,37 +451,37 @@ lists:keymerge(
 endsnippet
 
 
-snippet pput
+snippet pput "" i
 [{${1:Key}, ${2:Value}} | ${3:List}]
 endsnippet
 
 
-snippet pupdate
+snippet pupdate "" i
 lists:keyreplace(${1:Key}, 1, ${2:List}, {$1, ${3:Value}})
 endsnippet
 
 
-snippet premove
+snippet premove "" i
 proplists:delete(${1:Key}, ${2:List})
 endsnippet
 
 
-snippet psize
+snippet psize "" i
 length(${1:List})
 endsnippet
 
 
-snippet ptake
+snippet ptake "" i
 lists:keytake(${1:Key}, 1, ${2:List})
 endsnippet
 
 
-snippet pvalues
+snippet pvalues "" i
 [${2:N} || {_, $2} <- ${1:List}]
 endsnippet
 
 
-snippet pwith
+snippet pwith "" i
 [
 	${3:N}
 ||
@@ -484,7 +491,7 @@ snippet pwith
 endsnippet
 
 
-snippet pwithout
+snippet pwithout "" i
 [
 	${3:N}
 ||
@@ -492,4 +499,90 @@ snippet pwithout
 	not lists:keymember(K, 1, ${2:Without})
 ]
 endsnippet
+
+
+snippet pfiltermap
+lists:filtermap(
+	fun ({${2:K}, ${3:V}}) ->
+			${4:{true, $3}}
+	end,
+	${1:List}
+)
+endsnippet
 # end proplists
+
+
+snippet suite
+-module(`!p snip.rv = fn.split('.')[0]`).
+
+-include_lib("common_test/include/ct.hrl").
+-include_lib("eunit/include/eunit.hrl").
+
+-include("assertions.hrl").
+
+-export(
+	[
+		groups/0,
+		all/0,
+
+		$1
+	]
+).
+
+groups() ->
+	[
+		{
+			testcases,
+			[parallel],
+			[
+			`!p
+snip.rv = re.sub(
+	r"\/\d",
+	'',
+	t[1]
+)
+
+`
+			]
+		}
+	].
+
+
+endsnippet
+
+
+snippet #get "" i
+#get{ctx = Ctx, uid = Uid, query = Query, datarow = DataRow}
+endsnippet
+
+
+snippet cucode
+tw_currency:from_id(${1:CurrencyId})
+endsnippet
+
+
+snippet ccode
+tw_country:from_id(${1:CountryId})
+endsnippet
+
+
+snippet testconn
+Conn = database_test_helper:get_connection(),
+endsnippet
+
+
+snippet insertid
+database_test_helper:insert_id()
+endsnippet
+
+
+snippet % "" m
+${VISUAL/^/% /m}
+endsnippet
+
+
+snippet printt
+ct:print(default, 100, "$1: ~p~n", [${1}], [])
+endsnippet
+
+

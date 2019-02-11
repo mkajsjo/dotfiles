@@ -15,3 +15,14 @@ snippet ${1:trigger} "${2}" ${3}
 ${4}
 `echo 'endsnippet'`
 endsnippet
+
+snippet v "" i
+$\{VISUAL:${VISUAL}}
+endsnippet
+
+snippet wrap
+snippet ${1:trigger}
+${VISUAL/\(/(${VISUAL}/}
+`echo 'endsnippet'`
+endsnippet
+

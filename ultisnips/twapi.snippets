@@ -98,6 +98,11 @@ endsnippet
 
 snippet ctxs
 Webshop = tw_context:get_webshop_id(Ctx),
-Supershop = tw_webshop:get_supershop(Ctx),
+Supershop = tw_webshop:get_supershop(Webshop),
 ${1}
+endsnippet
+
+
+snippet conn
+Conn = tw_context:get_db_connection(Ctx)
 endsnippet
