@@ -91,14 +91,14 @@ endsnippet
 
 
 snippet ctxw
-Webshop = tw_context:get_webshop_id(Ctx),
+WebshopId = tw_context:get_webshop_id(Ctx),
 ${1}
 endsnippet
 
 
 snippet ctxs
-Webshop = tw_context:get_webshop_id(Ctx),
-Supershop = tw_webshop:get_supershop(Webshop),
+WebshopId = tw_context:get_webshop_id(Ctx),
+SupershopId = tw_webshop:get_supershop(WebshopId),
 ${1}
 endsnippet
 
@@ -106,3 +106,12 @@ endsnippet
 snippet conn
 Conn = tw_context:get_db_connection(Ctx)
 endsnippet
+
+
+snippet prop
+{${1}, {[
+	${2}
+]}}
+endsnippet
+
+

@@ -224,18 +224,23 @@ float_to_binary(${1:${VISUAL:Float}}, [\{decimals, ${2:D}}, compact])
 endsnippet
 
 
+snippet b2i "" i
+binary_to_integer(${1:${VISUAL:Binary}})
+endsnippet
+
+
 snippet b2f "" i
 binary_to_float(${1:${VISUAL:Binary}})
 endsnippet
 
 
 snippet l2b "" i
-list_to_binary(${1:${VISUAL:List}})
+unicode:characters_to_binary(${1:${VISUAL:List}})
 endsnippet
 
 
 snippet b2l "" i
-binary_to_list(${1:${VISUAL:Binary}})
+unicode:characters_to_list(${1:${VISUAL:Binary}})
 endsnippet
 
 
@@ -250,7 +255,7 @@ endsnippet
 
 
 snippet l2m "" i
-maps:from_list(${1:${VISUAL:Map}})
+maps:from_list(${1:${VISUAL:List}})
 endsnippet
 # end cast functions
 
@@ -277,7 +282,7 @@ endsnippet
 
 
 snippet mfold "" i
-maps:foldl(
+maps:fold(
 	fun (${3:K}, ${4:V}, ${5:Acc}) ->
 			${6:$5}
 	end,
@@ -586,3 +591,18 @@ ct:print(default, 100, "$1: ~p~n", [${1}], [])
 endsnippet
 
 
+snippet Conn
+Conn = tw_context:get_db_connection(Ctx),
+endsnippet
+
+
+snippet if
+if
+	${1:Expr} ->
+		${4:ok};
+	${2:Expr} ->
+		${5:ok}
+	${3:Expr} ->
+		${6:ok}
+end
+endsnippet

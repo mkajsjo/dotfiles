@@ -1,33 +1,42 @@
-"Vundle stuff
-set nocompatible              " be iMproved, required
-filetype off                  " required
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'w0rp/ale'
-Plugin 'git://github.com/StanAngeloff/php.vim.git'
-Plugin 'chriskempson/base16-vim'
-Plugin 'git://github.com/tpope/vim-repeat.git'
-Plugin 'git://github.com/tpope/vim-surround.git'
-Plugin 'git://github.com/wincent/scalpel.git'
-Plugin 'git://github.com/wincent/loupe.git'
-Plugin 'git://github.com/mileszs/ack.vim.git'
-Plugin 'git://github.com/junegunn/vim-easy-align.git'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'udalov/kotlin-vim'
-Plugin 'hsanson/vim-android'
-Plugin 'artur-shaik/vim-javacomplete2'
-Plugin 'alvan/vim-php-manual'
-Plugin 'SirVer/ultisnips'
-call vundle#end()            " required
-filetype plugin indent on    " required
-"End Vundle stuff
+" Auto install vim-plug if missing
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+set rtp +=~/.vim
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/vim-plug'
+Plug 'wincent/command-t', { 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make' }
+Plug 'w0rp/ale'
+Plug 'git://github.com/StanAngeloff/php.vim.git'
+Plug 'chriskempson/base16-vim'
+Plug 'git://github.com/tpope/vim-repeat.git'
+Plug 'git://github.com/tpope/vim-surround.git'
+Plug 'git://github.com/wincent/scalpel.git'
+Plug 'git://github.com/wincent/loupe.git'
+Plug 'git://github.com/mileszs/ack.vim.git'
+Plug 'git://github.com/junegunn/vim-easy-align.git'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'udalov/kotlin-vim'
+Plug 'hsanson/vim-android'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'alvan/vim-php-manual'
+Plug 'SirVer/ultisnips'
+Plug 'tpope/vim-fugitive'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
 
 if filereadable(expand("~/.vimrc_background"))
   source ~/.vimrc_background
 endif
+
+let g:CommandTFileScanner = 'find'
+let g:CommandTTraverseSCM = 'dir'
+let g:CommandTWildIgnore = &wildignore . ',*/_build/*,*.beam'
+let g:CommandTCancelMap = '<esc>'
 
 let base16colorspace=256
 let g:base16_shell_path='~/.zsh/base16-shell/scripts'
@@ -108,15 +117,15 @@ set expandtab    "Convert tabs to spaces
 
 "Number of spaces for tab key
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set tabstop=4
-autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set tabstop=2
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set tabstop=2
 
 "Number of spaces for tab key
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set softtabstop=4
-autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set softtabstop=2
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set softtabstop=2
 
 "Number of spaces for autoindent
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set shiftwidth=4
-autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*.vimrc set shiftwidth=2
+autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set shiftwidth=2
 
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *.zsh-theme set filetype=zsh
 

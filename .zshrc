@@ -77,6 +77,8 @@ path=(
 
 source $ZSH/oh-my-zsh.sh
 
+source ~/api_functions.zsh
+
 autoload -Uz init.sh
 
 # User configuration
@@ -104,6 +106,8 @@ bindkey -M vicmd "j" down-line-or-beginning-search
 
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools
+
+export EDITOR=nvim
 
 # Preferred editor for local and remote sessions
 #if [[ -n $SSH_CONNECTION ]]; then
