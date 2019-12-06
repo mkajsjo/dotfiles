@@ -149,3 +149,4 @@ BASE16_SHELL="$HOME/.config/base16-shell"
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 eval `keychain --eval --agents ssh mkajsjo &> /dev/null`
+eval `setxkbmap -layout us -variant dvp -option caps:swapescape`

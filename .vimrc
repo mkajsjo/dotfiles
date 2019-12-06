@@ -27,6 +27,7 @@ Plug 'alvan/vim-php-manual'
 Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-fugitive'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-speeddating'
 call plug#end()
 
 if filereadable(expand("~/.vimrc_background"))
@@ -144,11 +145,6 @@ endif
 
 if exists('&belloff')
   set belloff=all "Never ring bell
-endif
-
-"Create window focus by highlighting lines
-if exists('+colorcolumn')
-  "let &l:colorcolumn='+' . join(range(0, 254), ',+')
 endif
 
 set nonumber
@@ -279,10 +275,10 @@ function! GetVisualSelection() abort
 endfunction
 
 " Make current window more obvious by turning off/adjusting some features in non-current windows.
-if exists('+colorcolumn')
-  autocmd BufEnter,FocusGained,VimEnter,WinEnter * let &l:colorcolumn='+' . join(range(0, 254), ',+')
-  autocmd FocusLost,WinLeave * let &l:colorcolumn=join(range(1, 255), ',')
-endif
+" if exists('+colorcolumn')
+"   autocmd BufEnter,FocusGained,VimEnter,WinEnter * let &l:colorcolumn='+' . join(range(0, 254), ',+')
+"   autocmd FocusLost,WinLeave * let &l:colorcolumn=join(range(1, 255), ',')
+" endif
 
 inoremap {<CR> {<CR>}<Esc>O
 
