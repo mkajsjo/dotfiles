@@ -77,7 +77,7 @@ path=(
 
 source $ZSH/oh-my-zsh.sh
 
-source ~/api_functions.zsh
+#source ~/api_functions.zsh
 
 autoload -Uz init.sh
 

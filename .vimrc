@@ -26,6 +26,7 @@ Plug 'artur-shaik/vim-javacomplete2'
 Plug 'alvan/vim-php-manual'
 Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-fugitive'
+Plug 'ElmCast/elm-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-speeddating'
 call plug#end()
