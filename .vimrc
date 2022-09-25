@@ -9,26 +9,26 @@ endif
 set rtp +=~/.vim
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/vim-plug'
-Plug 'wincent/command-t', { 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make' }
+"Plug 'wincent/command-t', { 'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make' }
 Plug 'w0rp/ale'
-Plug 'git://github.com/StanAngeloff/php.vim.git'
-Plug 'chriskempson/base16-vim'
+"Plug 'git://github.com/StanAngeloff/php.vim.git'
+"Plug 'chriskempson/base16-vim'
 Plug 'git://github.com/tpope/vim-repeat.git'
 Plug 'git://github.com/tpope/vim-surround.git'
 Plug 'git://github.com/wincent/scalpel.git'
 Plug 'git://github.com/wincent/loupe.git'
 Plug 'git://github.com/mileszs/ack.vim.git'
-Plug 'git://github.com/junegunn/vim-easy-align.git'
+"Plug 'git://github.com/junegunn/vim-easy-align.git'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'udalov/kotlin-vim'
-Plug 'hsanson/vim-android'
-Plug 'artur-shaik/vim-javacomplete2'
-Plug 'alvan/vim-php-manual'
+"Plug 'udalov/kotlin-vim'
+"Plug 'hsanson/vim-android'
+"Plug 'artur-shaik/vim-javacomplete2'
+"Plug 'alvan/vim-php-manual'
 Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-fugitive'
-Plug 'ElmCast/elm-vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'tpope/vim-speeddating'
+"Plug 'ElmCast/elm-vim'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'tpope/vim-speeddating'
 call plug#end()
 
 if filereadable(expand("~/.vimrc_background"))
@@ -117,16 +117,20 @@ set smarttab     "Indent/dedent in leading whitespace
 set shiftround   "Always indent by multiple of shiftwith
 set expandtab    "Convert tabs to spaces
 
+
 "Number of spaces for tab key
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set tabstop=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *.hs               set tabstop=2
 autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set tabstop=2
 
 "Number of spaces for tab key
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set softtabstop=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *.hs               set softtabstop=2
 autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set softtabstop=2
 
 "Number of spaces for autoindent
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *                  set shiftwidth=4
+autocmd BufEnter,FocusGained,VimEnter,WinEnter *.hs               set shiftwidth=2
 autocmd BufEnter,FocusGained,VimEnter,WinEnter */origin/*,*/molway/*,*/elastics-backend/*,*.vimrc set shiftwidth=2
 
 autocmd BufEnter,FocusGained,VimEnter,WinEnter *.zsh-theme set filetype=zsh

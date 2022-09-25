@@ -1,13 +1,3 @@
-local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})@"
-PROMPT='%{$fg[cyan]%}%c ${ret_status} %{$fg[blue]%}%10>..>$(git_prompt_info)%>> %{$reset_color%}'
-
-RPROMPT='%{$fg[yellow]%}${command_benchmark} %{$fg[blue]%}⧖ %{$fg[cyan]%}%T%{$reset_color%}'
-
-ZSH_THEME_GIT_PROMPT_PREFIX=""
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
-ZSH_THEME_GIT_PROMPT_DIRTY=""
-ZSH_THEME_GIT_PROMPT_CLEAN=""
-
 # preexec runs before each command is executed.
 preexec() {
     time_before_command=$(date +%s)
@@ -40,3 +30,10 @@ format_timestamp() {
     local sec_str=$((($hour == 0 && $sec > 0)) && echo " ${sec}s" || echo '')
     echo ${hour_str}${min_str}${sec_str}
 }
+
+local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})@"
+
+#PROMPT="%{$fg[cyan]%}%c ${ret_status} %{$fg[blue]%}%10>..>$(git_prompt_info)%>> %{$reset_color%}"
+PROMPT="%{$fg[cyan]%}%c ${ret_status} %{$reset_color%}"
+
+RPROMPT="%{$fg[yellow]%}${command_benchmark} %{$fg[blue]%}⧖ %{$fg[cyan]%}%T%{$reset_color%}"
