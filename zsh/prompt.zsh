@@ -31,9 +31,7 @@ format_timestamp() {
     echo ${hour_str}${min_str}${sec_str}
 }
 
-local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})@"
+local ret_status="%(?:%F{green}:%F{red})@"
 
-#PROMPT="%{$fg[cyan]%}%c ${ret_status} %{$fg[blue]%}%10>..>$(git_prompt_info)%>> %{$reset_color%}"
-PROMPT="%{$fg[cyan]%}%c ${ret_status} %{$reset_color%}"
-
-RPROMPT="%{$fg[yellow]%}${command_benchmark} %{$fg[blue]%}⧖ %{$fg[cyan]%}%T%{$reset_color%}"
+PROMPT="%F{cyan}%c ${ret_status} %F{blue}%10>..>$(git rev-parse --abbrev-ref HEAD)%>> %f"
+RPROMPT="%F{yellow}${command_benchmark} %F{blue}⧖ %F{cyan}%T%f"
