@@ -74,8 +74,9 @@ bindkey -M vicmd "j" history-search-forward
 
 # Load completion
 autoload -Uz compinit
-compinit
+compinit -d $ZSH_COMPDUMP
 
+alias ls='ls --color=auto'
 alias init="init.sh"
 alias v=nvim
 
@@ -105,6 +106,8 @@ alias glgs='git log --stat'
 compdef _git glgs=git-log
 alias ga='git add'
 compdef _git ga=git-add
+alias gstp='git stash pop'
+compdef _git gstp=git-stash-pop
 
 # cd
 alias -g ...='../..'

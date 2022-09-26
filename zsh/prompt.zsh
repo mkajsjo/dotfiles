@@ -11,6 +11,10 @@ precmd() {
         command_benchmark=''
     fi
     unset time_before_command
+    git_branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+    if [[ ! -z $git_branch ]]; then
+        git_branch+=' '
+    fi
 }
 
 benchmark() {
@@ -31,7 +35,8 @@ format_timestamp() {
     echo ${hour_str}${min_str}${sec_str}
 }
 
-local ret_status="%(?:%F{green}:%F{red})@"
+local ret_status='%(?:%F{green}:%F{red})@'
 
-PROMPT="%F{cyan}%c ${ret_status} %F{blue}%10>..>$(git rev-parse --abbrev-ref HEAD)%>> %f"
-RPROMPT="%F{yellow}${command_benchmark} %F{blue}⧖ %F{cyan}%T%f"
+PROMPT='%F{cyan}%c ${ret_status} %F{blue}%10>..>${git_branch}%>>%f'
+RPROMPT='%F{yellow}${command_benchmark} %F{blue}⧖ %F{cyan}%T%f'
+setopt PROMPTSUBST
