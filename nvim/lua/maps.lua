@@ -1,4 +1,4 @@
-local opts = { noremap=true, silent=true }
+local opts = { noremap = true, silent = true }
 
 local normal = function(lhs, rhs)
     vim.api.nvim_set_keymap('n', lhs, rhs, opts)

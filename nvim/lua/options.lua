@@ -1,6 +1,4 @@
-local cmd = vim.cmd
 local opt = vim.opt
-local g = vim.g
 local indent = 4
 
 opt.syntax = 'on'              -- Enable syntax for current buffer

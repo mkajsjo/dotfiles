@@ -9,11 +9,10 @@ local servers = {
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics, {
-        virtual_text = false,
-        underline = true,
-        signs = true,
-    }
-)
+    virtual_text = false,
+    underline = true,
+    signs = true,
+})
 
 local sumneko_root_path = os.getenv('HOME') .. '/Programs/lua-language-server'
 local sumneko_binary = sumneko_root_path .. '/bin/lua-language-server'
@@ -48,7 +47,7 @@ local configs = {
                 },
                 diagnostics = {
                     -- Get the language server to recognize the `vim` global
-                    globals = {'vim'},
+                    globals = { 'vim' },
                 },
                 workspace = {
                     -- Make the server aware of Neovim runtime files
@@ -56,6 +55,7 @@ local configs = {
                         [vim.fn.expand('$VIMRUNTIME/lua')] = true,
                         [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
                     },
+                    checkThirdParty = false,
                 },
             },
         },
