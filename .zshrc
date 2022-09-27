@@ -72,6 +72,8 @@ fpath=(
 path=(
     $HOME/.config/composer/vendor/bin
     $HOME/bin
+    $HOME/.poetry/bin
+    $HOME/.pyenv/bin
     $path
 )
 
@@ -109,6 +111,10 @@ export PATH=$PATH:$ANDROID_HOME/tools
 
 export EDITOR=nvim
 
+# flags for docker required for work
+export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_BUILDKIT=1
+
 # Preferred editor for local and remote sessions
 #if [[ -n $SSH_CONNECTION ]]; then
 #  export EDITOR='vim'
@@ -143,10 +149,18 @@ function goto() {
     git pull
 }
 
+if [ -e /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+    source /usr/share/doc/fzf/examples/completion.zsh
+fi
+
 BASE16_SHELL="$HOME/.config/base16-shell"
 [ -n "$PS1" ] && \
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 eval `keychain --eval --agents ssh mkajsjo &> /dev/null`
-eval `setxkbmap -layout us -variant dvp -option caps:swapescape`
+eval `setxkbmap -layout us -variant dvp -option caps:escape`
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
