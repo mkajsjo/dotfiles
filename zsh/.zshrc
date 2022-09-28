@@ -20,6 +20,20 @@ path=(
 )
 
 #
+# AUTOLOADS
+#
+
+# history search
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# tab completion
+autoload -Uz compinit
+compinit -d $ZSH_COMPDUMP
+
+#
 # SETTINGS
 #
 
@@ -30,6 +44,7 @@ setopt IGNORE_EOF               # [default] prevent accidental C-d from exiting 
 setopt LIST_PACKED              # make completion lists more densely packed
 setopt MENU_COMPLETE            # auto-insert first possible ambiguous completion
 setopt NO_BEEP                  # don't beep
+unsetopt IGNORE_EOF             # close zsh when closing tmux split
 
 # cd
 setopt AUTO_CD                  # can omit cd
@@ -52,6 +67,9 @@ HISTSIZE=9999
 # Direct cd to projects from anywhere
 cdpath=($HOME/dev)
 
+# Case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
 # Changes timeout for entering vi mode from 0.4s to 0.1s (can affect other commands).
 export KEYTIMEOUT=1
 
@@ -63,18 +81,14 @@ export KEYTIMEOUT=1
 bindkey -v
 
 # autocompletion using arrow keys (based on history)
-bindkey "^[OA" history-search-backward
-bindkey "^[OB" history-search-forward
-bindkey -M vicmd "k" history-search-backward
-bindkey -M vicmd "j" history-search-forward
+bindkey "^[OA" up-line-or-beginning-search
+bindkey "^[OB" down-line-or-beginning-search
+bindkey -M vicmd "k" up-line-or-beginning-search
+bindkey -M vicmd "j" down-line-or-beginning-search
 
 #
 # ALIAS
 #
-
-# Load completion
-autoload -Uz compinit
-compinit -d $ZSH_COMPDUMP
 
 alias ls='ls --color=auto'
 alias init="init.sh"
