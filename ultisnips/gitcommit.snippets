@@ -1,0 +1,8 @@
+snippet !
+${1:feat}: ${3:Summary}
+
+Related Work Items: #${4:`!p
+import os
+snip.rv = os.popen('git rev-parse --abbrev-ref HEAD | grep "[0-9]\{5,\}" -o').read().replace('\n', '')
+`}
+endsnippet

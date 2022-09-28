@@ -1,0 +1,98 @@
+snippet p
+C.Log(${1:${VISUAL}});
+endsnippet
+
+snippet getset
+{ get; set; }
+endsnippet
+
+snippet getpset
+{ get; private set; }
+endsnippet
+
+snippet ic
+ICollection<${1}>
+endsnippet
+
+snippet iroc
+IReadOnlyCollection<${1}>
+endsnippet
+
+snippet test
+[Test]
+public async Task ${1:TestName}()
+{
+}
+endsnippet
+
+snippet f
+foreach (var ${1} in ${2:$1s})
+{
+	${3}
+}
+endsnippet
+
+snippet if
+if (${1})
+{
+	${2}
+}
+endsnippet
+
+snippet elif
+if (${1})
+{
+	${2}
+}
+else
+{
+	${3}
+}
+endsnippet
+
+snippet w
+while (${1})
+{
+	${2}
+}
+endsnippet
+
+snippet ns
+namespace ${1}
+{
+	${2}
+}
+endsnippet
+
+snippet dict
+Dictionary<${1}> ${2}
+endsnippet
+
+snippet cl
+public class ${1:`!p snip.rv = snip.basename`}
+{
+	$0
+}
+endsnippet
+
+snippet !
+namespace ${1};
+
+public class `!p snip.rv = snip.basename`
+{
+	$0
+}
+endsnippet
+
+snippet prop
+public ${1} { get; set; }
+endsnippet
+
+snippet httppatch
+[HttpPatch]
+[Route("")]
+public async Task<ActionResult> FunctionName()
+{
+	return Ok();
+}
+endsnippet
