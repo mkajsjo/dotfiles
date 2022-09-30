@@ -3,6 +3,7 @@ xset r rate 210 40
 
 # programmer dvorak, with rebind of caps to escape
 setxkbmap -layout us -variant dvp -option caps:escape
+setxkbmap layout
 
 # Environment variables
 export EDITOR="nvim"
