@@ -35,6 +35,13 @@ require('packer').startup(function(use)
     }
     -- LSP config
     use 'neovim/nvim-lspconfig'
+    -- Better LSP diagnostics
+    use {
+        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+            require("lsp_lines").setup()
+        end,
+    }
     -- Treesitter
     use 'nvim-treesitter/nvim-treesitter'
     -- vim-tmux pane switching

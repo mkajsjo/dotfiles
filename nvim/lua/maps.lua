@@ -51,7 +51,9 @@ xvisual('<c-t>', '<c-p>')
 -- TELESCOPE
 --
 
-normal('<leader>t', '<cmd>Telescope find_files<cr>')
+normal('<leader>t', '<cmd>Telescope find_files<CR>')
+normal('gs', '<cmd>Telescope git_status<CR>')
+normal('ge', '<cmd>Telescope diagnostics<CR>')
 
 --
 -- LSP
@@ -66,4 +68,4 @@ normal('gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
 normal('<leader>c', ':Telescope lsp_code_actions<CR>')
 visual('<leader>c', '<cmd>lua vim.lsp.buf.range_code_action()<CR>')
 normal('<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>')
-normal('<leader>d', '<cmd>lua vim.diagnostic.open_float({scope="line"})<CR>')
+normal('<leader>d', '<cmd>lua require("lsp_lines").toggle()<CR>')
