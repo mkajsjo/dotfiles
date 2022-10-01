@@ -5,6 +5,7 @@ local servers = {
     'pylsp',
     'rls',
     'sumneko_lua',
+    'hls',
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -59,6 +60,13 @@ local configs = {
                 },
             },
         },
+    },
+    hls = {
+        settings = {
+            haskell = {
+                formattingProvider = 'ormolu'
+            }
+        }
     },
 }
 
