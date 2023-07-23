@@ -7,15 +7,21 @@ source $HOME/.xprofile
 
 export ZSH=$HOME/.config/zsh
 export ZSH_COMPDUMP=$HOME/.zcompdump
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 fpath=(
     $HOME/dev/dotfiles/zsh
+    $HOME/.pyenv/version
     $fpath
 )
 
 path=(
     $HOME/.config/composer/vendor/bin
     $HOME/bin
+    $HOME/.dotnet/tools
+    $HOME/.local/bin
     $path
 )
 
@@ -122,6 +128,8 @@ alias ga='git add'
 compdef _git ga=git-add
 alias gstp='git stash pop'
 compdef _git gstp=git-stash-pop
+alias gpsup='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+compdef _git gpsup=git-push
 
 # cd
 alias -g ...='../..'
@@ -141,6 +149,18 @@ alias 9='cd +9'
 # MISC
 #
 
+# .Net
+#DOTNET_ROOT=/usr/share/dotnet
+
+# cd on nnn exit
+nnn_cd()
+{
+    if ! [ -z "$NNN_PIPE" ]; then
+        printf "%s\0" "0c${PWD}" > "${NNN_PIPE}" !&
+    fi
+}
+trap nnn_cd EXIT
+
 # List previous directories
 function d () {
   if [[ -n $1 ]]; then
@@ -156,3 +176,14 @@ compdef _dirs d
 
 source $ZSH/prompt.zsh
 
+export DOCKER_BUILDKIT=1
+
+# Open tmux if not already in tmux
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux
+fi
+
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

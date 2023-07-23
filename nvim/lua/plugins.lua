@@ -7,6 +7,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
     vim.cmd 'packadd packer.nvim'
 end
 
+-- Config ionide before setup
+vim.g['fsharp#lsp_auto_setup'] = 0
+
 require('packer').startup(function(use)
     -- Package manager
     use 'wbthomason/packer.nvim'
@@ -18,6 +21,10 @@ require('packer').startup(function(use)
             vim.cmd [[ colorscheme tokyonight ]]
         end
     }
+    -- F# support
+    use 'ionide/Ionide-vim'
+    -- Cache stuff for faster startup
+    use 'lewis6991/impatient.nvim'
     -- Fuzzy file finder
     use {
         'nvim-telescope/telescope.nvim',
@@ -28,6 +35,8 @@ require('packer').startup(function(use)
         'nvim-telescope/telescope-fzf-native.nvim',
         run = 'make'
     }
+    -- open ui selects in telescope
+    use 'nvim-telescope/telescope-ui-select.nvim'
     -- fzf
     use {
         "junegunn/fzf",
@@ -35,13 +44,15 @@ require('packer').startup(function(use)
     }
     -- LSP config
     use 'neovim/nvim-lspconfig'
+    -- better quickfix list
+    use 'kevinhwang91/nvim-bqf'
     -- Better LSP diagnostics
-    use {
-        "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-        config = function()
-            require("lsp_lines").setup()
-        end,
-    }
+    --use {
+    --    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    --    config = function()
+    --        require("lsp_lines").setup()
+    --    end,
+    --}
     -- Treesitter
     use 'nvim-treesitter/nvim-treesitter'
     -- vim-tmux pane switching
@@ -78,7 +89,6 @@ require('packer').startup(function(use)
                 },
                 sources = {
                     { name = 'nvim_lsp' },
-                    { name = 'buffer' },
                     { name = 'path' },
                 }
             }
@@ -97,7 +107,7 @@ require('packer').startup(function(use)
             vim.g.UltiSnipsExpandTrigger = '<tab>'
             vim.g.UltiSnipsJumpForwardTrigger = '<tab>'
             vim.g.UltiSnipsEditSplit = 'vertical'
-            vim.g.UltiSnipsSnippetsDir = os.getenv('HOME') .. '/dev/dotfiles/ultisnips'
+            vim.g.UltiSnipsSnippetDirectories = { os.getenv('HOME') .. '/dev/dotfiles/ultisnips' }
         end
     }
     -- Default very magic search & better highlight
@@ -133,4 +143,12 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
+require('telescope').setup({
+    extensions = {
+        ["ui-select"] = {
+            require("telescope.themes").get_cursor()
+        }
+    }
+})
 require('telescope').load_extension('fzf')
+require('telescope').load_extension('ui-select')
