@@ -6,6 +6,10 @@ snippet getset
 { get; set; }
 endsnippet
 
+snippet getinit
+{ get; init; }
+endsnippet
+
 snippet getpset
 { get; private set; }
 endsnippet
@@ -94,5 +98,63 @@ snippet httppatch
 public async Task<ActionResult> FunctionName()
 {
 	return Ok();
+}
+endsnippet
+
+snippet	controller
+namespace Captario.Modeling.Api.$1s;
+
+[Route("api/initiatives/{initiativeId:guid}/`!p snip.rv = t[1].lower()`s")]
+[Authorize]
+[ApiController]
+public class ${1}sController : Controller
+{
+	private readonly $1Service _`!p snip.rv = t[1].lower()`Service;
+
+	public $1sController(
+		$1Service `!p snip.rv = t[1].lower()`Service)
+	{
+		_`!p snip.rv = t[1].lower()`Service = `!p snip.rv = t[1].lower()`Service;
+	}
+
+	[HttpPost]
+	[ProducesResponseType(typeof(Create$1Response), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	public async Task<ActionResult<Create$1Response>> Create$1([FromBody] Create$1Request request)
+	{
+		var result = await _`!p snip.rv = t[1].lower()`Service.Create$1(request, User.GetUserId());
+		return Ok(result);
+	}
+
+	[HttpGet("{`!p snip.rv = t[1].lower()`Id:guid}")]
+	[ProducesResponseType(typeof(Get$1Response), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	[Check$1Access]
+	public async Task<ActionResult<Get$1Response>> Get$1(Guid `!p snip.rv = t[1].lower()`Id)
+	{
+		var `!p snip.rv = t[1].lower()` = await _`!p snip.rv = t[1].lower()`Service.Get$1Async(`!p snip.rv = t[1].lower()`Id);
+		return Ok(`!p snip.rv = t[1].lower()`);
+	}
+
+	[HttpPatch("{`!p snip.rv = t[1].lower()`Id:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[Check$1Access]
+	public async Task<ActionResult> Patch$1(Guid `!p snip.rv = t[1].lower()`Id, [FromBody] Patch$1Request request)
+	{
+		await _`!p snip.rv = t[1].lower()`Service.Patch$1(request, User.GetUserId());
+		return NoContent();
+	}
+
+	[HttpDelete("{`!p snip.rv = t[1].lower()`Id:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	[Check$1Access]
+	public async Task<ActionResult> Delete$1(Guid `!p snip.rv = t[1].lower()`Id)
+	{
+		await _`!p snip.rv = t[1].lower()`Service.Delete$1Async(`!p snip.rv = t[1].lower()`Id, User.GetUserId());
+		return NoContent();
+	}
 }
 endsnippet

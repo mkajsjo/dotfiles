@@ -1,4 +1,8 @@
-local opts = { noremap = true, silent = true }
+local opts = { noremap = true, silent = false }
+
+local silent_normal = function(lhs, rhs)
+    vim.api.nvim_set_keymap('n', lhs, rhs, { noremap = true, silent = true })
+end
 
 local normal = function(lhs, rhs)
     vim.api.nvim_set_keymap('n', lhs, rhs, opts)
@@ -47,13 +51,19 @@ insert('<c-t>', '<c-p>')
 insert('<c-n>', '<c-n>')
 xvisual('<c-t>', '<c-p>')
 
+-- No jumplist
+silent_normal('{', ":keepjumps normal '{'<CR>")
+silent_normal('}', ":keepjumps normal '}'<CR>")
+
+-- backwards completion
+insert('<c-x><c-t>', '<c-x><c-p>')
+
 --
 -- TELESCOPE
 --
 
 normal('<leader>t', '<cmd>Telescope find_files<CR>')
 normal('gs', '<cmd>Telescope git_status<CR>')
-normal('ge', '<cmd>Telescope diagnostics<CR>')
 
 --
 -- LSP
@@ -64,8 +74,12 @@ normal('gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 normal('<leader>h', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
 normal('gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
 normal('gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
-normal('gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
-normal('<leader>c', ':Telescope lsp_code_actions<CR>')
-visual('<leader>c', '<cmd>lua vim.lsp.buf.range_code_action()<CR>')
+normal('gf', '<cmd>lua vim.lsp.buf.format { async = true }<CR>')
+normal('<leader>c', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+visual('<leader>c', '<cmd>lua vim.lsp.buf.code_action()<CR>')
 normal('<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>')
-normal('<leader>d', '<cmd>lua require("lsp_lines").toggle()<CR>')
+--normal('<leader>d', '<cmd>lua require("lsp_lines").toggle()<CR>')
+normal('<leader>d', '<cmd>lua vim.diagnostic.open_float(0, {scope="line"})<CR>')
+normal('<a-n>', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+normal('<a-t>', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+

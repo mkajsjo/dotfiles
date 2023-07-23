@@ -1,11 +1,13 @@
 local servers = {
     'csharp_ls',
+    --'omnisharp',
     'eslint',
     'tsserver',
     'pylsp',
     'rls',
-    'sumneko_lua',
+    --'sumneko_lua',
     'hls',
+    'fsharp_language_server'
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -68,13 +70,24 @@ local configs = {
             }
         }
     },
+    fsharp_language_server = {
+        cmd = { "fsautocomplete" }
+    }
+    --omnisharp = {
+    --    --cmd = { "dotnet", "/home/mkajsjo/.omnisharp/OmniSharp.dll" },
+    --    enable_editorconfig_support = true,
+    --    enable_ms_build_load_projects_on_demand = false,
+    --    enable_roslyn_analyzers = false,
+    --    organize_imports_on_format = false,
+    --    enable_import_completion = false,
+    --    sdk_include_prereleases = true,
+    --    analyze_open_documents_only = false,
+    --}
 }
 
 -- User configurations for all servers.
 local config_defaults = {
-    capabilities = require("cmp_nvim_lsp").update_capabilities(
-        vim.lsp.protocol.make_client_capabilities()
-    ),
+    capabilities = require("cmp_nvim_lsp").default_capabilities(),
 }
 
 -- Setup configurations
