@@ -7,9 +7,9 @@ source $HOME/.xprofile
 
 export ZSH=$HOME/.config/zsh
 export ZSH_COMPDUMP=$HOME/.zcompdump
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+#export PYENV_ROOT="$HOME/.pyenv"
+#command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init -)"
 
 fpath=(
     $HOME/dev/dotfiles/zsh
@@ -19,6 +19,7 @@ fpath=(
 
 path=(
     $HOME/.config/composer/vendor/bin
+    $HOME/.cargo/bin
     $HOME/bin
     $HOME/.dotnet/tools
     $HOME/.local/bin

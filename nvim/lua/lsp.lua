@@ -7,7 +7,7 @@ local servers = {
     'rls',
     --'sumneko_lua',
     'hls',
-    'fsharp_language_server'
+    'fsautocomplete'
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -70,9 +70,6 @@ local configs = {
             }
         }
     },
-    fsharp_language_server = {
-        cmd = { "fsautocomplete" }
-    }
     --omnisharp = {
     --    --cmd = { "dotnet", "/home/mkajsjo/.omnisharp/OmniSharp.dll" },
     --    enable_editorconfig_support = true,
