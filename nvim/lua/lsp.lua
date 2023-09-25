@@ -38,6 +38,9 @@ local configs = {
             },
         },
     },
+    fsautocomplete = {
+        cmd = { 'fsautocomplete' },
+    },
     sumneko_lua = {
         cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
         settings = {
