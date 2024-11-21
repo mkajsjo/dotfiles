@@ -80,6 +80,6 @@ visual('<leader>c', '<cmd>lua vim.lsp.buf.code_action()<CR>')
 normal('<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>')
 --normal('<leader>d', '<cmd>lua require("lsp_lines").toggle()<CR>')
 normal('<leader>d', '<cmd>lua vim.diagnostic.open_float(0, {scope="line"})<CR>')
-normal('<a-n>', '<cmd>lua vim.diagnostic.goto_next()<CR>')
-normal('<a-t>', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+normal('<a-n>', '<cmd>cnext<CR>')
+normal('<a-t>', '<cmd>cprevious<CR>')
 

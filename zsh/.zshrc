@@ -21,6 +21,7 @@ path=(
     $HOME/.config/composer/vendor/bin
     $HOME/.cargo/bin
     $HOME/bin
+    $HOME/.dotnet
     $HOME/.dotnet/tools
     $HOME/.local/bin
     $path
@@ -146,12 +147,16 @@ alias 7='cd +7'
 alias 8='cd +8'
 alias 9='cd +9'
 
+alias cap='cd ~/dev/Captario-SUM'
+alias mod='cd ~/dev/Captario-SUM/module-modeling'
+alias cli='cd ~/dev/Captario-SUM/client/packages/dimensional-modeling'
+
 #
 # MISC
 #
 
 # .Net
-#DOTNET_ROOT=/usr/share/dotnet
+export DOTNET_ROOT=$HOME/.dotnet
 
 # cd on nnn exit
 nnn_cd()

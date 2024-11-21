@@ -2,12 +2,12 @@ local servers = {
     'csharp_ls',
     --'omnisharp',
     'eslint',
-    'tsserver',
+    'ts_ls',
     'pylsp',
     'rls',
     --'sumneko_lua',
     'hls',
-    'fsautocomplete'
+    'fsautocomplete',
 }
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -21,14 +21,6 @@ local sumneko_root_path = os.getenv('HOME') .. '/Programs/lua-language-server'
 local sumneko_binary = sumneko_root_path .. '/bin/lua-language-server'
 
 local configs = {
-    tsserver = {
-        capabilities = {
-            document_formatting = false
-        },
-        on_attach = function(client)
-            client.server_capabilities.document_formatting = false
-        end
-    },
     rls = {
         settings = {
             rust = {
@@ -73,16 +65,6 @@ local configs = {
             }
         }
     },
-    --omnisharp = {
-    --    --cmd = { "dotnet", "/home/mkajsjo/.omnisharp/OmniSharp.dll" },
-    --    enable_editorconfig_support = true,
-    --    enable_ms_build_load_projects_on_demand = false,
-    --    enable_roslyn_analyzers = false,
-    --    organize_imports_on_format = false,
-    --    enable_import_completion = false,
-    --    sdk_include_prereleases = true,
-    --    analyze_open_documents_only = false,
-    --}
 }
 
 -- User configurations for all servers.

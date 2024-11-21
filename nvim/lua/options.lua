@@ -36,6 +36,7 @@ opt.shiftwidth = indent        -- Number of spaces for autoindent
 opt.breakindent = true         -- Indent wrapped lines to match start
 opt.breakindentopt = 'shift:2' -- Indent wrapped lines once more
 opt.showbreak = '↳ '           -- Start wrapped lines with this prefix
+opt.linebreak = true           -- Break wrapped lines at whole words
 
 -- Show whitespace
 opt.list = true
