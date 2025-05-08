@@ -31,7 +31,10 @@ local configs = {
         },
     },
     fsautocomplete = {
-        cmd = { 'fsautocomplete' },
+        cmd = { 'fsautocomplete', '--adaptive-lsp-server-enabled' },
+        on_init = function(client, _)
+            client.server_capabilities.semanticTokensProvider = nil  -- turn off semantic tokens
+        end,
     },
     sumneko_lua = {
         cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
@@ -76,5 +79,5 @@ local config_defaults = {
 for _, lsp in ipairs(servers) do
     local config = configs[lsp] or {}
     config = vim.tbl_extend("keep", config, config_defaults)
-    require('lspconfig')[lsp].setup(config)
+    vim.lsp.enable(lsp)
 end
