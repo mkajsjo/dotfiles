@@ -1,0 +1,50 @@
+# Function to display help
+display_help() {
+    echo "Usage:"
+    echo "  $1 [author] [nr_weeks]"
+    echo
+    echo "List the last commits for a specific author grouped by branch."
+    echo
+    echo "Arguments:"
+    echo "  author        The author name to filter (e.g., 'Mikael')"
+    echo "  nr_weeks    (Optional) Last nr_weeks. Defaults to 2"
+    echo
+    echo "Examples:"
+    echo "  $1 Mikael 4   # Lists the last 4 weeks"
+    echo "  $1 Mikael     # Lists the last 2 weeks"
+}
+
+latest_by_author() {
+    # Check for --help flag
+    if [[ "$1" == "--help" ]]; then
+        display_help $0
+        return 0
+    fi
+
+    # Check if the number of arguments is at least 1 (author is mandatory)
+    if [ $# -lt 1 ]; then
+        echo "Error: Missing required argument: author"
+        echo "Use --help for usage information"
+        return 1
+    fi
+
+    # Assign the input arguments to variables
+    author=$1
+
+    # Check if a number of weeks is provided, else set it to 2
+    nr_weeks=${2:-2}
+
+    # Lists & formats the commits for the last $nr_weeks
+    git log --since="$nr_weeks weeks ago" --no-merges --date-order --all --date=short --decorate=short --pretty=format:'%an|%D|%h - (%ad): %s' \
+    | # Filter for the author
+    rg -i "$author" \
+    | # Remove the author name
+    sed "s/$author [^|]*|//Ig" \
+    | # Remove leading pipe when no branch name
+    sed 's/^|//' \
+    | # Add a newlines around branch name
+    sed -E 's/^([^|]+)\|/\n\1\n/'
+}
+
+# TODO It does not manage to separate PRs into master into their own groups
+latest_by_author "$@"

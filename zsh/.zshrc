@@ -12,7 +12,7 @@ export ZSH_COMPDUMP=$HOME/.zcompdump
 #eval "$(pyenv init -)"
 
 fpath=(
-    $HOME/dev/dotfiles/zsh
+    $HOME/dev/dotfiles/zsh/funs
     $HOME/.pyenv/version
     $fpath
 )
@@ -30,6 +30,9 @@ path=(
 #
 # AUTOLOADS
 #
+
+# My custom functions
+autoload -U $fpath[1]/*(:t)
 
 # history search
 autoload -U up-line-or-beginning-search
@@ -63,14 +66,14 @@ setopt CD_SILENT                # Never print the working directory after a cd
 # history
 setopt APPEND_HISTORY           # append to history instead of replacing it
 setopt HIST_IGNORE_ALL_DUPS     # do not put duplicated command into history list
-setopt HIST_SAVE_NO_DUPS        # do not save duplicated command
+setopt HIST_SAVE_NO_DUPS        # omit older duplicates of newer commands
 setopt HIST_REDUCE_BLANKS       # remove unnecessary blanks
 setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately after execution
 setopt HIST_IGNORE_SPACE        # don't record commands starting with a space
 setopt SHARE_HISTORY            # share history across shells
-HISTFILE=$HOME/.zhistory
-SAVEHIST=10000
-HISTSIZE=9999
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=1000000
+SAVEHIST=1000000
 
 # Direct cd to projects from anywhere
 cdpath=($HOME/dev)
@@ -149,6 +152,7 @@ alias 9='cd +9'
 
 alias cap='cd ~/dev/Captario-SUM'
 alias mod='cd ~/dev/Captario-SUM/module-modeling'
+alias modsrc='cd ~/dev/Captario-SUM/module-modeling/src/modeling-api'
 alias cli='cd ~/dev/Captario-SUM/client/packages/dimensional-modeling'
 
 #
@@ -178,6 +182,7 @@ function d () {
 compdef _dirs d
 
 # fzf
+export FZF_DEFAULT_OPTS='--height 50% --reverse'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 source $ZSH/prompt.zsh
@@ -189,7 +194,17 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
   exec tmux
 fi
 
+# Fix so that I don't forget to start minikube with enough resources.
+minikube() {
+  if [[ "$1" == "start" ]]; then
+    command minikube start --cpus 14 --memory 16384 --extra-config=kubelet.serialize-image-pulls=false "${@:2}"
+  else
+    command minikube "$@"
+  fi
+}
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.local/share/../bin/env"
