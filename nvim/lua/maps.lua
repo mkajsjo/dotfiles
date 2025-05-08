@@ -59,11 +59,15 @@ silent_normal('}', ":keepjumps normal '}'<CR>")
 insert('<c-x><c-t>', '<c-x><c-p>')
 
 --
--- TELESCOPE
+-- FZF-LUA
 --
 
-normal('<leader>t', '<cmd>Telescope find_files<CR>')
-normal('gs', '<cmd>Telescope git_status<CR>')
+normal('<leader>t', '<cmd>FzfLua files<CR>')
+normal('<leader>/', '<cmd>FzfLua live_grep_glob resume=true<CR>')
+normal('<leader>q', '<cmd>FzfLua quickfix<CR>')
+normal('<leader>gs', '<cmd>FzfLua git_status<CR>')
+normal('<leader>*', '<cmd>FzfLua grep_cword<CR>')
+visual('<leader>*', '<cmd>FzfLua grep_visual<CR>')
 
 --
 -- LSP

@@ -7,9 +7,6 @@ if fn.empty(fn.glob(install_path)) > 0 then
     vim.cmd 'packadd packer.nvim'
 end
 
--- Config ionide before setup
-vim.g['fsharp#lsp_auto_setup'] = 0
-
 require('packer').startup(function(use)
     -- Package manager
     use 'wbthomason/packer.nvim'
@@ -21,38 +18,19 @@ require('packer').startup(function(use)
             vim.cmd [[ colorscheme tokyonight ]]
         end
     }
-    -- F# support
-    use 'ionide/Ionide-vim'
     -- Cache stuff for faster startup
     use 'lewis6991/impatient.nvim'
-    -- Fuzzy file finder
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = { { 'nvim-lua/plenary.nvim' } }
-    }
-    -- fzf for telescope
-    use {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        run = 'make'
-    }
-    -- open ui selects in telescope
-    use 'nvim-telescope/telescope-ui-select.nvim'
     -- fzf
     use {
         "junegunn/fzf",
         run = ":call fzf#install()"
     }
+    -- Fuzzy finder viewer
+    use 'ibhagwan/fzf-lua'
     -- LSP config
     use 'neovim/nvim-lspconfig'
     -- better quickfix list
     use 'kevinhwang91/nvim-bqf'
-    -- Better LSP diagnostics
-    --use {
-    --    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    --    config = function()
-    --        require("lsp_lines").setup()
-    --    end,
-    --}
     -- Treesitter
     use 'nvim-treesitter/nvim-treesitter'
     -- vim-tmux pane switching
@@ -100,26 +78,26 @@ require('packer').startup(function(use)
     use 'tpope/vim-surround'
     -- Git wrapper
     use 'tpope/vim-fugitive'
-    -- Snippets
-    use {
-        'SirVer/ultisnips',
-        config = function()
-            vim.g.UltiSnipsExpandTrigger = '<tab>'
-            vim.g.UltiSnipsJumpForwardTrigger = '<tab>'
-            vim.g.UltiSnipsEditSplit = 'vertical'
-            vim.g.UltiSnipsSnippetDirectories = { os.getenv('HOME') .. '/dev/dotfiles/ultisnips' }
-        end
-    }
     -- Default very magic search & better highlight
     use 'wincent/loupe'
-    -- Grep
-    use {
-        'mileszs/ack.vim',
-        config = function()
-            vim.g.ackprg = 'rg --vimgrep --no-heading'
-        end
-    }
+    -- Copilot
+    use 'github/copilot.vim'
 end)
+
+local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+parser_config.fsharp = {
+    install_info = {
+        url = 'https://github.com/ionide/tree-sitter-fsharp',
+        branch = 'main',
+        files = { 'src/scanner.c', 'src/parser.c' },
+        location = "fsharp"
+    },
+    requires_generate_from_grammar = false,
+    filetype = 'fsharp',
+}
+
+-- Disable default syntax highlighting
+vim.cmd('syntax off')
 
 require('nvim-treesitter.configs').setup {
     ensure_installed = {
@@ -134,6 +112,7 @@ require('nvim-treesitter.configs').setup {
     },
     highlight = {
         enable = true,
+        additional_vim_regex_highlighting = false,
     },
     indent = {
         enable = true,
@@ -143,12 +122,21 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
-require('telescope').setup({
-    extensions = {
-        ["ui-select"] = {
-            require("telescope.themes").get_cursor()
-        }
-    }
+-- TODO figure out where to put this
+require('fzf-lua').setup({
+    winopts = {
+        preview = {
+            layout = 'vertical',
+            vertical = 'right:60%',
+            horizontal = 'up:70%',
+        },
+    },
+    quickfix = {
+        winopts = {
+            preview = {
+                layout = 'horizontal',
+            },
+        },
+    },
 })
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('ui-select')
+require("fzf-lua").register_ui_select()
