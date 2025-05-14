@@ -1,70 +1,115 @@
-local fn = vim.fn
 
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-
-if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
-    vim.cmd 'packadd packer.nvim'
-end
-
-require('packer').startup(function(use)
-    -- Package manager
-    use 'wbthomason/packer.nvim'
-    -- Color scheme
-    use {
+local plugins = {
+    -- Colorscheme
+    {
         'folke/tokyonight.nvim',
-        config = function()
-            vim.g.tokyonight_style = 'storm'
-            vim.cmd [[ colorscheme tokyonight ]]
-        end
-    }
-    -- Cache stuff for faster startup
-    use 'lewis6991/impatient.nvim'
-    -- fzf
-    use {
-        "junegunn/fzf",
-        run = ":call fzf#install()"
-    }
-    -- Fuzzy finder viewer
-    use 'ibhagwan/fzf-lua'
-    -- LSP
-    use {
-        'mason-org/mason.nvim',
-        config = function()
-            require('mason').setup()
+        lazy = false,
+        priority = 1000,
+        init = function()
+            vim.cmd 'colorscheme tokyonight-storm'
         end,
-    }
-    use {
-        'mason-org/mason-lspconfig.nvim',
+    },
+    -- Fuzzy finder
+    {
+        'ibhagwan/fzf-lua',
+        lazy = false,
+        opts = {
+            winopts = {
+                preview = {
+                    layout = 'vertical',
+                    vertical = 'right:60%',
+                    horizontal = 'up:70%',
+                },
+            },
+            quickfix = {
+                winopts = {
+                    preview = {
+                        layout = 'horizontal',
+                    },
+                },
+            },
+        },
         config = function()
-            require("mason-lspconfig").setup {
-                ensure_installed = { "lua_ls" },
+            local fzf = require 'fzf-lua'
+            fzf.setup {}
+            fzf.register_ui_select()
+        end,
+    },
+    -- LSP
+    {
+        -- LSP installer
+        'mason-org/mason.nvim',
+        -- LSP config
+        'neovim/nvim-lspconfig',
+        -- lspconfig integration
+        {
+            'mason-org/mason-lspconfig.nvim',
+            opts = {
+                ensure_installed = { 'lua_ls' }
             }
-        end
-    }
-    -- Load nvim types for Lua LSP
-    use {
-        'folke/lazydev.nvim',
-        ft = 'lua'
-    }
-    use 'neovim/nvim-lspconfig'
+        },
+        -- Load nvim types for Lua LSP
+        {
+            'folke/lazydev.nvim',
+            ft = 'lua'
+        }
+    },
     -- better quickfix list
-    use 'kevinhwang91/nvim-bqf'
-    -- Treesitter
-    use 'nvim-treesitter/nvim-treesitter'
+    'kevinhwang91/nvim-bqf',
     -- vim-tmux pane switching
-    use 'christoomey/vim-tmux-navigator'
+    'christoomey/vim-tmux-navigator',
+    -- Treesitter
+    {
+        'nvim-treesitter/nvim-treesitter',
+        opts = {
+            ensure_installed = {
+                'c',
+                'lua',
+                'c_sharp',
+                'rust',
+                'typescript',
+                'haskell',
+                'erlang',
+                'python'
+            },
+            highlight = {
+                enable = true,
+                additional_vim_regex_highlighting = false,
+            },
+            indent = {
+                enable = true,
+            },
+            autotag = {
+                enable = true,
+            },
+        },
+        config = function(_, opts)
+            local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+            parser_config.fsharp = {
+                install_info = {
+                    url = 'https://github.com/ionide/tree-sitter-fsharp',
+                    branch = 'main',
+                    files = { 'src/scanner.c', 'src/parser.c' },
+                    location = "fsharp"
+                },
+                requires_generate_from_grammar = false,
+                filetype = 'fsharp',
+            }
+
+            require("nvim-treesitter.configs").setup(opts)
+        end,
+    },
     -- Autocompletion engine
-    use {
+    {
         'hrsh7th/nvim-cmp',
-        requires = {
+        dependencies = {
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
             'saadparwaiz1/cmp_luasnip',
         },
         config = function()
-            local cmp = require('cmp')
+            local cmp = require 'cmp'
             cmp.setup {
                 snippet = {
                     expand = function(args)
@@ -99,105 +144,30 @@ require('packer').startup(function(use)
                 experimental = {
                     ghost_text = { enabled = true },  -- Enable ghost text for snippets
                 },
-                --sorting = {
-                --    comparators = {
-                --        function(entry1, entry2)
-                --            local types = require('cmp.types')
-
-                --            local variable = types.lsp.CompletionItemKind.Text
-                --            local kind1 = entry1:get_kind() --- @type lsp.CompletionItemKind | number
-                --            local kind2 = entry2:get_kind() --- @type lsp.CompletionItemKind | number
-                --            if kind1 == variable and kind2 ~= variable then
-                --                return true
-                --            elseif kind2 == variable and kind1 ~= variable then
-                --                return false
-                --            end
-                --            return nil
-                --        end
-                --    },
-                --},
             }
         end
-    }
-    -- Fix repeat
-    use 'tpope/vim-repeat'
+    },
     -- Change surround commands
-    use 'tpope/vim-surround'
-    -- Git wrapper
-    use 'tpope/vim-fugitive'
-    -- Default very magic search & better highlight
-    use 'wincent/loupe'
-    -- Copilot
-    --use 'github/copilot.vim'
+    {
+        "kylechui/nvim-surround",
+        event = "VeryLazy",
+    },
     -- Snippets
-    use({
+    {
         "L3MON4D3/LuaSnip",
-        tag = "v2.*",
+        version = "v2.*",
         run = "make install_jsregexp"
-    })
-end)
-
-local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-parser_config.fsharp = {
-    install_info = {
-        url = 'https://github.com/ionide/tree-sitter-fsharp',
-        branch = 'main',
-        files = { 'src/scanner.c', 'src/parser.c' },
-        location = "fsharp"
     },
-    requires_generate_from_grammar = false,
-    filetype = 'fsharp',
+    -- Git commands
+    -- TODO replace? 'tpope/vim-fugitive'
+    -- Default very magic search & better highlight
+    -- TODO do I need anything from this anymore? 'wincent/loupe'
 }
 
--- Disable default syntax highlighting
-vim.cmd('syntax off')
-
-require('nvim-treesitter.configs').setup {
-    ensure_installed = {
-        'c',
-        'lua',
-        'c_sharp',
-        'rust',
-        'typescript',
-        'haskell',
-        'erlang',
-        'python'
-    },
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = {
-        enable = true,
-    },
-    autotag = {
-        enable = true,
-    },
+require('lazy').setup {
+    spec = plugins,
+    -- Don't automatically check for plugin updates
+    checker = { enabled = false },
+    -- colorscheme that will be used when installing plugins.
+    install = { colorscheme = { 'tokyonight-storm' } },
 }
-
--- TODO figure out where to put this
-require('fzf-lua').setup({
-    winopts = {
-        preview = {
-            layout = 'vertical',
-            vertical = 'right:60%',
-            horizontal = 'up:70%',
-        },
-    },
-    quickfix = {
-        winopts = {
-            preview = {
-                layout = 'horizontal',
-            },
-        },
-    },
-})
-require("fzf-lua").register_ui_select()
-
-require("fzf-list-definitions")
-
-require("luasnip").config.set_config({
-    history = true,
-    updateevents = "TextChanged,TextChangedI",  -- Updates on text changes
-    enable_autosnippets = true,
-})
