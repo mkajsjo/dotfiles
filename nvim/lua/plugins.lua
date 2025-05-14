@@ -38,16 +38,14 @@ local plugins = {
     -- LSP
     {
         -- LSP installer
-        'mason-org/mason.nvim',
+        {
+            'mason-org/mason.nvim',
+            config = function()
+                require('mason').setup()
+            end,
+        },
         -- LSP config
         'neovim/nvim-lspconfig',
-        -- lspconfig integration
-        {
-            'mason-org/mason-lspconfig.nvim',
-            opts = {
-                ensure_installed = { 'lua_ls' }
-            }
-        },
         -- Load nvim types for Lua LSP
         {
             'folke/lazydev.nvim',
@@ -61,7 +59,9 @@ local plugins = {
     -- Treesitter
     {
         'nvim-treesitter/nvim-treesitter',
+        version = false,
         opts = {
+            sync_install = false,
             ensure_installed = {
                 'c',
                 'lua',
