@@ -103,51 +103,34 @@ local plugins = {
     },
     -- Autocompletion engine
     {
-        'hrsh7th/nvim-cmp',
-        dependencies = {
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/cmp-buffer',
-            'hrsh7th/cmp-path',
-            'saadparwaiz1/cmp_luasnip',
+        'saghen/blink.cmp',
+        version = '1.*',
+        dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
+        opts = {
+            keymap = {
+                ['<C-t>'] = { 'insert_prev', 'fallback' },
+                ['<C-n>'] = {
+                    'show',
+                    'insert_next',
+                    'fallback',
+                },
+                ['<C-e>'] = { 'cancel', 'fallback' },
+                ['<Tab>'] = { 'snippet_forward', 'accept', 'fallback' },
+                ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+            },
+            snippets = { preset = 'luasnip' },
+            sources = {
+                default = { 'snippets', 'lsp', 'buffer' },
+            },
+            -- Displays a preview of the selected item on the current line
+            completion = {
+                ghost_text = {
+                    enabled = true,
+                    show_without_selection = true,
+                },
+                menu = { auto_show = false },
+            },
         },
-        config = function()
-            local cmp = require 'cmp'
-            cmp.setup {
-                snippet = {
-                    expand = function(args)
-                        require('luasnip').lsp_expand(args.body)
-                    end,
-                },
-                completion = {
-                    --autocomplete = false,
-                    completeopt = 'menu,menuone,noselect',
-                },
-                mapping = {
-                    ['<C-t>'] = cmp.mapping.select_prev_item(),
-                    ['<C-n>'] = function()
-                        if not cmp.visible() then
-                            cmp.complete()
-                        end
-                        cmp.select_next_item()
-                    end,
-                    ['<C-e>'] = cmp.mapping.close(),
-                    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                    ['<CR>'] = cmp.mapping.confirm {
-                        behavior = cmp.ConfirmBehavior.Replace,
-                        select = true
-                    },
-                },
-                sources = {
-                    { name = 'luasnip' },
-                    { name = 'nvim_lsp' },
-                    --{ name = 'path' },
-                },
-                experimental = {
-                    ghost_text = { enabled = true },  -- Enable ghost text for snippets
-                },
-            }
-        end
     },
     -- Change surround commands
     {
