@@ -40,22 +40,24 @@ local plugins = {
         -- LSP installer
         {
             'mason-org/mason.nvim',
-            config = function()
-                require('mason').setup()
-            end,
+            opts = {}
         },
         -- LSP config
         'neovim/nvim-lspconfig',
         -- Load nvim types for Lua LSP
         {
             'folke/lazydev.nvim',
-            ft = 'lua'
+            ft = 'lua',
+            opts = {}
         }
     },
     -- better quickfix list
     'kevinhwang91/nvim-bqf',
     -- vim-tmux pane switching
-    'christoomey/vim-tmux-navigator',
+    {
+        'christoomey/vim-tmux-navigator',
+        event = "VimEnter",
+    },
     -- Treesitter
     {
         'nvim-treesitter/nvim-treesitter',
