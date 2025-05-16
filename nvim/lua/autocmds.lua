@@ -12,15 +12,16 @@ cmd [[
     autocmd BufWritePre * :call StripTrailingWhitespaces()
 ]]
 
+-- Format file on write
+vim.api.nvim_create_autocmd('BufWritePre', {
+    pattern = '*.fs',
+    callback = function () vim.lsp.buf.format { async = false } end
+})
+
 -- Return to last edit position when opening files
 cmd [[
     autocmd BufReadPost * call setpos('.', getpos("'\""))
 ]]
-
-vim.api.nvim_create_autocmd(
-    "BufWritePre",
-    { pattern = '*.fs', command = ':lua vim.lsp.buf.format { async = false }'}
-)
 
 local dotnet_build = 'dotnet build --no-restore --nologo --verbosity:quiet --consoleLoggerParameters:NoSummary --consoleLoggerParameters:GenerateFullPaths-true'
 local captario_modeling_dir = '/home/mkajsjo/dev/Captario-SUM/module-modeling'
