@@ -16,6 +16,9 @@ vim.keymap.set('v', '<c-y>', '"+y')
 -- Substitute
 vim.keymap.set('v', 's', ':s/\\v%V')
 
+-- Remove search highlights
+vim.keymap.set('n', '<leader>n', ':nohlsearch<CR>')
+
 -- Autocomplete navigation
 vim.keymap.set('i', '<c-t>', '<c-p>')
 vim.keymap.set('i', '<c-n>', '<c-n>')
