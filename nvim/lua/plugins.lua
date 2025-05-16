@@ -1,4 +1,3 @@
-
 local plugins = {
     -- Colorscheme
     {
@@ -117,8 +116,8 @@ local plugins = {
                     'fallback',
                 },
                 ['<C-e>'] = { 'cancel', 'fallback' },
-                ['<Tab>'] = { 'snippet_forward', 'accept', 'fallback' },
-                ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
+                ['<Tab>'] = { 'accept', 'fallback' },
+                ['<S-Tab>'] = { 'fallback' },
             },
             snippets = { preset = 'luasnip' },
             sources = {
@@ -127,6 +126,7 @@ local plugins = {
                     lazydev = {
                         name = 'LazyDev',
                         module = 'lazydev.integrations.blink',
+                        priority = 1000
                     },
                 },
             },
@@ -143,13 +143,21 @@ local plugins = {
     -- Change surround commands
     {
         "kylechui/nvim-surround",
-        event = "VeryLazy",
+        opts = {}
     },
     -- Snippets
     {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
-        run = "make install_jsregexp"
+        run = "make install_jsregexp",
+        opts = {
+            history = true
+        },
+        init = function()
+            for _, ft_path in ipairs(vim.api.nvim_get_runtime_file("lua/snippets/*.lua", true)) do
+                loadfile(ft_path)()
+            end
+        end,
     },
     -- Split/Join language constructs
     {
