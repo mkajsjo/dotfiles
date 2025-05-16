@@ -29,6 +29,7 @@ end
 --
 
 vim.g.mapleader = ' '
+vim.keymap.set('n', 'gj', function () require('treesj').toggle() end, opts)
 
 -- Pane switching
 normal('<c-j>', '<c-w>j')
@@ -86,4 +87,3 @@ normal('<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>')
 normal('<leader>d', '<cmd>lua vim.diagnostic.open_float(0, {scope="line"})<CR>')
 normal('<a-n>', '<cmd>cnext<CR>')
 normal('<a-t>', '<cmd>cprevious<CR>')
-

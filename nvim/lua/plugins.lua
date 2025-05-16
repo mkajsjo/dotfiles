@@ -72,7 +72,9 @@ local plugins = {
                 'typescript',
                 'haskell',
                 'erlang',
-                'python'
+                'python',
+                'markdown',
+                'vimdoc',
             },
             highlight = {
                 enable = true,
@@ -120,7 +122,13 @@ local plugins = {
             },
             snippets = { preset = 'luasnip' },
             sources = {
-                default = { 'snippets', 'lsp', 'buffer' },
+                default = { 'snippets', 'lazydev', 'lsp' },
+                providers = {
+                    lazydev = {
+                        name = 'LazyDev',
+                        module = 'lazydev.integrations.blink',
+                    },
+                },
             },
             -- Displays a preview of the selected item on the current line
             completion = {
@@ -143,6 +151,11 @@ local plugins = {
         version = "v2.*",
         run = "make install_jsregexp"
     },
+    -- Split/Join language constructs
+    {
+        'Wansmer/treesj',
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    }
     -- Git commands
     -- TODO replace? 'tpope/vim-fugitive'
     -- Default very magic search & better highlight
