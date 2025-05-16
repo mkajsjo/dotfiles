@@ -22,24 +22,22 @@ vim.api.nvim_create_autocmd(
     { pattern = '*.fs', command = ':lua vim.lsp.buf.format { async = false }'}
 )
 
--- for F# files
+local dotnet_build = 'dotnet build --no-restore --nologo --verbosity:quiet --consoleLoggerParameters:NoSummary --consoleLoggerParameters:GenerateFullPaths-true'
+local captario_modeling_dir = '/home/mkajsjo/dev/Captario-SUM/module-modeling'
+local modeling_project = ' ./src/modeling-api/modeling-api.fsproj'
+
+-- Switch :make to 'dotnet build' for F# files
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "fsharp",
     callback = function ()
-        -- Switch :make to 'dotnet build'
-        if vim.fn.getcwd() == "/home/mkajsjo/dev/Captario-SUM/module-modeling" then
-            vim.opt_local.makeprg = "dotnet build --no-restore --nologo --verbosity:quiet --consoleLoggerParameters:NoSummary --consoleLoggerParameters:GenerateFullPaths-true ./src/modeling-api/modeling-api.fsproj"
-        else
-            vim.opt_local.makeprg = "dotnet build --no-restore --nologo --verbosity:quiet --consoleLoggerParameters:NoSummary --consoleLoggerParameters:GenerateFullPaths-true"
-        end
+        vim.opt_local.makeprg = vim.fn.getcwd() == captario_modeling_dir and dotnet_build .. modeling_project or dotnet_build
 
         -- Set errorformat to parse dotnet build output
         vim.opt_local.errorformat = table.concat({
-            "%f(%l\\,%c): %trror %m[%.%#",   -- For error lines
-            "%f(%l\\,%c): %tarning %m[%.%#", -- For warning lines
-            "%-G%.%#",                        -- Ignore any lines that don't match
+            '%f(%l\\,%c): %trror %m[%.%#',   -- For error lines
+            '%f(%l\\,%c): %tarning %m[%.%#', -- For warning lines
+            '%-G%.%#',                       -- Ignore any lines that don't match
         }, ",")
-
     end,
 })
 
