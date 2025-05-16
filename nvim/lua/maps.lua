@@ -87,3 +87,8 @@ normal('<leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>')
 normal('<leader>d', '<cmd>lua vim.diagnostic.open_float(0, {scope="line"})<CR>')
 normal('<a-n>', '<cmd>cnext<CR>')
 normal('<a-t>', '<cmd>cprevious<CR>')
+
+-- Run Lua
+vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>')
+vim.keymap.set('n', '<space>x', '<cmd>:.lua<CR>')
+vim.keymap.set('v', '<space>x', '<cmd>:lua<CR>')
