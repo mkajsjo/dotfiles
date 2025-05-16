@@ -1,20 +1,17 @@
--- Remove trailing whitespaces on save
-vim.cmd [[
-    fun! StripTrailingWhitespaces()
-        let l = line(".")
-        let c = col(".")
-        %s/\s\+$//e
-        call cursor(l, c)
-    endfun
-
-    autocmd BufWritePre * :call StripTrailingWhitespaces()
-]]
+-- Remove trailing whitespaces on write
+vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function()
+        local view = vim.fn.winsaveview()
+        vim.cmd [[keepjumps %s/\s\+$//e]]
+        vim.fn.winrestview(view)
+    end,
+})
 
 -- Format file on write
 vim.api.nvim_create_autocmd('BufWritePre', { callback = function() vim.lsp.buf.format() end })
 
 -- Return to last edit position when opening files
-vim.api.nvim_create_autocmd('BufReadPost', { callback = function() vim.fn.setpos('.', vim.fn.getpos('\'"')) end })
+vim.api.nvim_create_autocmd('BufReadPost', { command = 'normal! g`"' })
 
 local dotnet_build = table.concat({
     'dotnet build',
