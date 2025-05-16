@@ -1,25 +1,9 @@
-local servers = {
-    --'csharp_ls',
-    --'omnisharp',
-    'eslint',
-    'ts_ls',
-    'pylsp',
-    'rls',
-    'lua_ls',
-    'hls',
-    'fsautocomplete',
+-- Configurations for all servers
+local default_config = {
+    capabilities = require('blink.cmp').get_lsp_capabilities()
 }
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    underline = true,
-    signs = true,
-})
-
-local sumneko_root_path = os.getenv('HOME') .. '/Programs/lua-language-server'
-local sumneko_binary = sumneko_root_path .. '/bin/lua-language-server'
-
+-- Configurations for specific servers
 local configs = {
     rls = {
         settings = {
@@ -31,10 +15,18 @@ local configs = {
         },
     },
     fsautocomplete = {
-        cmd = { 'fsautocomplete', '--adaptive-lsp-server-enabled' },
-        on_init = function(client, _)
-            client.server_capabilities.semanticTokensProvider = nil  -- turn off semantic tokens
-        end,
+        cmd = {
+            'fsautocomplete',
+            '--adaptive-lsp-server-enabled',
+            '--background-service-enabled',
+            '--project-graph-enabled',
+        },
+        settings = {
+            FSharp = {
+                ExcludeProjectDirectories = { '.git', 'bin', 'obj' },
+                KeywordsAutocomplete = true,
+            }
+        }
     },
     hls = {
         settings = {
@@ -43,16 +35,17 @@ local configs = {
             }
         }
     },
-}
-
--- User configurations for all servers.
-local config_defaults = {
-    --capabilities = require("cmp_nvim_lsp").default_capabilities(),
+    eslint = {},
+    ts_ls = {},
+    pylsp = {},
+    lua_ls = {},
 }
 
 -- Setup configurations
-for _, lsp in ipairs(servers) do
-    local config = configs[lsp] or {}
-    config = vim.tbl_extend("keep", config, config_defaults)
-    vim.lsp.enable(lsp)
+for server_name, config in pairs(configs) do
+    local server_config = vim.tbl_extend('force', default_config, config)
+    vim.lsp.config(server_name, server_config)
+    vim.lsp.enable(server_name)
 end
+
+vim.diagnostic.config { severity_sort = true }
