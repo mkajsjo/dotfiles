@@ -17,7 +17,7 @@ vim.keymap.set('v', '<c-y>', '"+y')
 vim.keymap.set('v', 's', ':s/\\v%V')
 
 -- Remove search highlights
-vim.keymap.set('n', '<leader>n', ':nohlsearch<CR>')
+vim.keymap.set('n', '<leader>n', '<cmd>nohlsearch<CR>')
 
 -- Autocomplete navigation
 vim.keymap.set('i', '<c-t>', '<c-p>')
@@ -30,16 +30,16 @@ vim.keymap.set('n', '<a-n>', '<cmd>cnext<CR>')
 vim.keymap.set('n', '<a-t>', '<cmd>cprevious<CR>')
 
 -- No jumplist
-vim.keymap.set('n', '{', ":keepjumps normal '{'<CR>", { silent = true })
-vim.keymap.set('n', '}', ":keepjumps normal '}'<CR>", { silent = true })
+vim.keymap.set('n', '{', "<cmd>keepjumps normal '{'<CR>", { silent = true })
+vim.keymap.set('n', '}', "<cmd>keepjumps normal '}'<CR>", { silent = true })
 
 -- Split/Join language constructs
 vim.keymap.set('n', 'gj', function() require('treesj').toggle() end)
 
 -- Run Lua
 vim.keymap.set('n', '<space><space>x', '<cmd>source %<CR>')
-vim.keymap.set('n', '<space>x', '<cmd>:.lua<CR>')
-vim.keymap.set('v', '<space>x', '<cmd>:lua<CR>')
+vim.keymap.set('n', '<space>x', '<cmd>.lua<CR>')
+vim.keymap.set('v', '<space>x', ':lua<CR>')
 
 -- Fuzzy find
 vim.keymap.set('n', '<leader>t', '<cmd>FzfLua files<CR>')
