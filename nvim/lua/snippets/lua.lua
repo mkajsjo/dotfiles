@@ -15,4 +15,17 @@ ls.add_snippets('lua', {
             { delimiters = '<>' }
         )
     ),
+    s(
+        'sm',
+        fmt([=[
+            s('<>', fmt([[
+                <>
+                ]],
+                { <> }
+            )),
+            ]=],
+            { i(1, 'trig'), i(2), i(3) },
+            { delimiters = '<>' }
+        )
+    ),
 })

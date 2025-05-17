@@ -157,6 +157,10 @@ local plugins = {
             for _, ft_path in ipairs(vim.api.nvim_get_runtime_file("lua/snippets/*.lua", true)) do
                 loadfile(ft_path)()
             end
+
+            vim.api.nvim_create_user_command('Snippets', function()
+                vim.cmd('vsplit ' .. vim.fn.stdpath('config') .. '/lua/snippets/' .. vim.bo.filetype .. '.lua')
+            end, {})
         end,
     },
     -- Split/Join language constructs
