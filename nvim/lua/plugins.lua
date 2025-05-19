@@ -110,11 +110,7 @@ local plugins = {
         opts = {
             keymap = {
                 ['<C-t>'] = { 'insert_prev', 'fallback' },
-                ['<C-n>'] = {
-                    'show',
-                    'insert_next',
-                    'fallback',
-                },
+                ['<C-n>'] = { 'show', 'insert_next', 'fallback', },
                 ['<C-e>'] = { 'cancel', 'fallback' },
                 ['<Tab>'] = { 'accept', 'fallback' },
                 ['<S-Tab>'] = { 'fallback' },

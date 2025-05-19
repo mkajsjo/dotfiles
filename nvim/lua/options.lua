@@ -19,6 +19,7 @@ vim.opt.signcolumn = 'yes'       -- Always show sign column
 vim.opt.ignorecase = true        -- Case-insensitive search
 vim.opt.smartcase = true         -- Case-sensitive search if capital letter in search string
 vim.opt.incsearch = true         -- Show matches while typing the search command
+vim.opt.pumheight = 8            -- Height of completion menu
 
 -- File
 vim.opt.backup = false      -- Don't create backup files

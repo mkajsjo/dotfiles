@@ -203,6 +203,15 @@ minikube() {
   fi
 }
 
+# Hack to make dotnet output more readable
+dotnet() {
+    if [[ -e "/home/mkajsjo/dev/wrap-dotnet/bin/Release/net9.0/wrap-dotnet" ]]; then
+        command /home/mkajsjo/dev/wrap-dotnet/bin/Release/net9.0/wrap-dotnet "$@"
+    else
+        command dotnet "$@"
+    fi
+}
+
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
