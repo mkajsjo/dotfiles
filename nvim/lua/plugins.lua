@@ -163,9 +163,25 @@ local plugins = {
     {
         'Wansmer/treesj',
         dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    }
-    -- Git commands
-    -- TODO replace? 'tpope/vim-fugitive'
+    },
+    -- Git integration
+    {
+        'lewis6991/gitsigns.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim'
+        },
+        lazy = false,
+        opts = {
+            signs = {
+                add = { text = "┃" },
+                change = { text = "┃" },
+                delete = { text = "▁" },
+                topdelete = { text = "▔" },
+                changedelete = { text = "┃" },
+                untracked = { text = "┃" },
+            }
+        },
+    },
     -- Default very magic search & better highlight
     -- TODO do I need anything from this anymore? 'wincent/loupe'
 }

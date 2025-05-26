@@ -61,6 +61,12 @@ vim.keymap.set('v', '<leader>c', function() vim.lsp.buf.code_action() end)
 vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end)
 vim.keymap.set('n', '<leader>d', function() vim.diagnostic.open_float() end)
 
+-- Git
+vim.keymap.set('n', '<leader>gb', function() require('gitsigns').blame({ ignore_whitespace = true }) end)
+vim.keymap.set('n', '<leader>gq', function() require('gitsigns').setqflist() end)
+vim.keymap.set('n', '<leader>gd', function() require('gitsigns').diffthis() end)
+vim.keymap.set('n', '<leader>gh', function() require('gitsigns').stage_hunk() end)
+
 -- Snippets
 vim.keymap.set({ 'i', 's' }, '<c-l>', function()
     local ls = require 'luasnip'
